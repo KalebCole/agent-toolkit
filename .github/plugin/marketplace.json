@@ -1,0 +1,62 @@
+{
+  "name": "agent-toolkit",
+  "owner": {
+    "name": "Kaleb Cole"
+  },
+  "metadata": {
+    "description": "Kaleb's Agent Toolkit and upstream plugins he recommends.",
+    "version": "0.0.0-prototype"
+  },
+  "plugins": [
+    {
+      "name": "agent-toolkit",
+      "description": "Kaleb's owned skills, agents, and hooks.",
+      "version": "0.0.0-prototype",
+      "source": "./",
+      "author": {
+        "name": "Kaleb Cole",
+        "url": "https://github.com/KalebCole"
+      },
+      "repository": "https://github.com/KalebCole/agent-toolkit"
+    },
+    {
+      "name": "humanizer",
+      "description": "External plugin recommended by Kaleb and maintained upstream.",
+      "source": {
+        "source": "github",
+        "repo": "blader/humanizer"
+      },
+      "author": {
+        "name": "blader",
+        "url": "https://github.com/blader"
+      },
+      "repository": "https://github.com/blader/humanizer"
+    },
+    {
+      "name": "cli-printing-press",
+      "description": "External plugin recommended by Kaleb and maintained upstream.",
+      "source": {
+        "source": "github",
+        "repo": "mvanhorn/cli-printing-press"
+      },
+      "author": {
+        "name": "mvanhorn",
+        "url": "https://github.com/mvanhorn"
+      },
+      "repository": "https://github.com/mvanhorn/cli-printing-press"
+    },
+    {
+      "name": "mattpocock-skills",
+      "description": "External plugin recommended by Kaleb and maintained upstream.",
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
+      },
+      "author": {
+        "name": "Matt Pocock",
+        "url": "https://github.com/mattpocock"
+      },
+      "repository": "https://github.com/mattpocock/skills"
+    }
+  ]
+}
