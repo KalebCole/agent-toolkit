@@ -1,74 +1,96 @@
-# Agent Toolkit — Type-first prototype
+# Agent Toolkit
 
-This branch prototypes **Agent Toolkit as a source collection**. The repository
-root is one installable Copilot plugin. Owned components are grouped by their
-native type, like a skills collection.
+My curated GitHub Copilot CLI marketplace: the agent tools I use, installed
+from the repositories that own and maintain them.
 
-> [!NOTE]
-> The named components are synthetic placeholders used to judge the repository
-> structure. This is not the v0 payload.
+Agent Toolkit does not copy external source. Each plugin is an individual
+choice and follows its live upstream repository.
 
-## Browse the source
+## Marketplace
 
-- [`skills/`](skills/) — one directory and `SKILL.md` per owned skill
-- [`agents/`](agents/) — owned custom agent profiles
-- [`hooks/`](hooks/) — hook configurations and their scripts
-- [`.github/plugin/marketplace.json`](.github/plugin/marketplace.json) —
-  upstream Copilot plugins, installed and updated from their canonical sources
-- [`upstream/`](upstream/) — pointer-only references for tools that are not
-  Copilot plugins
+| Plugin | Use | Source |
+|---|---|---|
+| `mattpocock-skills` | My primary engineering workflow | [mattpocock/skills](https://github.com/mattpocock/skills) |
+| `humanizer` | Make AI-assisted writing sound natural | [blader/humanizer](https://github.com/blader/humanizer) |
+| `cli-printing-press` | Build agent-friendly Go CLIs | [mvanhorn/cli-printing-press](https://github.com/mvanhorn/cli-printing-press) |
+| `superpowers` | Optional, more prescriptive engineering workflows | [obra/superpowers](https://github.com/obra/superpowers) |
 
-The root [`plugin.json`](plugin.json) makes the owned skills, agents, and hooks
-one installable Core Plugin. External source is never copied or submoduled.
+All entries are **External · Live upstream**. Their authors own their source,
+releases, licenses, and future changes.
 
-```text
-agent-toolkit/
-├── plugin.json
-├── skills/
-│   └── example-workflow/
-│       └── SKILL.md
-├── agents/
-│   └── example-reviewer.agent.md
-├── hooks/
-│   └── hooks.json
-├── .github/plugin/
-│   └── marketplace.json
-└── upstream/
-    └── frontend/
-```
+## Install
 
-## Curated Copilot marketplace
-
-The Agent Toolkit marketplace distributes plugins I trust while keeping their
-source and authorship at the original repositories:
-
-- **External** — [`humanizer`](https://github.com/blader/humanizer), maintained
-  by blader
-- **External** —
-  [`cli-printing-press`](https://github.com/mvanhorn/cli-printing-press),
-  maintained by mvanhorn
-- **External** —
-  [`mattpocock-skills`](https://github.com/mattpocock/skills), maintained by
-  Matt Pocock
+Register the marketplace:
 
 ```bash
 copilot plugin marketplace add KalebCole/agent-toolkit
 copilot plugin marketplace browse agent-toolkit
-copilot plugin install humanizer@agent-toolkit
 ```
 
-Registering the marketplace installs nothing. Each plugin remains an individual
-choice. An installed entry uses the `plugin@agent-toolkit` name, but its
-`author`, `repository`, and `source` metadata point to the upstream maintainer.
-Copilot's native plugin lifecycle remains responsible for updates.
+Registration installs nothing. Install only what you want:
 
-## Other upstream references
+```bash
+copilot plugin install mattpocock-skills@agent-toolkit
+copilot plugin install humanizer@agent-toolkit
+copilot plugin install cli-printing-press@agent-toolkit
+copilot plugin install superpowers@agent-toolkit
+```
 
-Libraries, CLIs, and standalone resources that do not fit the Copilot
-marketplace live under [`upstream/`](upstream/). These are bibliography entries,
-not source mirrors.
+### CLI Printing Press prerequisite
 
-## Prototype question
+The Printing Press skills require its Go binary. Install Go 1.26.5 or newer,
+then install the binary:
 
-Does this split make ownership and updates clear while keeping external tools
-visible as part of the portfolio?
+```bash
+go install github.com/mvanhorn/cli-printing-press/v4/cmd/cli-printing-press@latest
+```
+
+See the [upstream installation guide](https://github.com/mvanhorn/cli-printing-press#install)
+for the supported full setup.
+
+## Update
+
+Refresh the marketplace catalog, then update installed plugins:
+
+```bash
+copilot plugin marketplace update agent-toolkit
+copilot plugin update --all
+```
+
+These are separate operations. Refreshing the catalog does not update installed
+plugin files.
+
+To follow this custom marketplace automatically at Copilot session start, add
+the following entry to your personal `~/.copilot/settings.json`:
+
+```json
+{
+  "extraKnownMarketplaces": {
+    "agent-toolkit": {
+      "source": {
+        "source": "github",
+        "repo": "KalebCole/agent-toolkit"
+      },
+      "autoUpdate": true
+    }
+  }
+}
+```
+
+This is a personal opt-in. Agent Toolkit cannot enable it for you. Because the
+entries follow live upstream sources, updates can include changes that Agent
+Toolkit has not reviewed.
+
+## Other references
+
+[`upstream/`](upstream/) is a pointer-only bibliography for useful tools that
+do not fit the Copilot marketplace. It contains links, not mirrored source.
+
+## Release scope
+
+Marketplace v0 is verified with GitHub Copilot CLI. GitHub Copilot Desktop
+support is not claimed until its plugin behavior is tested.
+
+A later release will add a source-first Core Plugin after my public-safe skills,
+agents, and hooks are ready. This release contains no empty plugin or synthetic
+placeholder content.

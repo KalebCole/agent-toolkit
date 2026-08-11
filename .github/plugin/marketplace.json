@@ -4,24 +4,26 @@
     "name": "Kaleb Cole"
   },
   "metadata": {
-    "description": "Kaleb's Agent Toolkit and upstream plugins he recommends.",
-    "version": "0.0.0-prototype"
+    "description": "Kaleb's curated GitHub Copilot CLI plugins.",
+    "version": "0.1.0"
   },
   "plugins": [
     {
-      "name": "agent-toolkit",
-      "description": "Kaleb's owned skills, agents, and hooks.",
-      "version": "0.0.0-prototype",
-      "source": "./",
-      "author": {
-        "name": "Kaleb Cole",
-        "url": "https://github.com/KalebCole"
+      "name": "mattpocock-skills",
+      "description": "External · Live upstream. Engineering workflows maintained by Matt Pocock.",
+      "source": {
+        "source": "github",
+        "repo": "mattpocock/skills"
       },
-      "repository": "https://github.com/KalebCole/agent-toolkit"
+      "author": {
+        "name": "Matt Pocock",
+        "url": "https://github.com/mattpocock"
+      },
+      "repository": "https://github.com/mattpocock/skills"
     },
     {
       "name": "humanizer",
-      "description": "External plugin recommended by Kaleb and maintained upstream.",
+      "description": "External · Live upstream. Natural writing workflow maintained by blader.",
       "source": {
         "source": "github",
         "repo": "blader/humanizer"
@@ -34,7 +36,7 @@
     },
     {
       "name": "cli-printing-press",
-      "description": "External plugin recommended by Kaleb and maintained upstream.",
+      "description": "External · Live upstream. Agent-friendly CLI generator maintained by mvanhorn. Requires its Go binary.",
       "source": {
         "source": "github",
         "repo": "mvanhorn/cli-printing-press"
@@ -46,17 +48,17 @@
       "repository": "https://github.com/mvanhorn/cli-printing-press"
     },
     {
-      "name": "mattpocock-skills",
-      "description": "External plugin recommended by Kaleb and maintained upstream.",
+      "name": "superpowers",
+      "description": "External · Live upstream. Optional prescriptive engineering workflows maintained by Jesse Vincent.",
       "source": {
         "source": "github",
-        "repo": "mattpocock/skills"
+        "repo": "obra/superpowers"
       },
       "author": {
-        "name": "Matt Pocock",
-        "url": "https://github.com/mattpocock"
+        "name": "Jesse Vincent",
+        "url": "https://github.com/obra"
       },
-      "repository": "https://github.com/mattpocock/skills"
+      "repository": "https://github.com/obra/superpowers"
     }
   ]
 }
