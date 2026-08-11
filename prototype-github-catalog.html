@@ -1,0 +1,1005 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Agent Toolkit — GitHub repository prototype</title>
+  <!-- PROTOTYPE: Three GitHub repository structures, switchable via ?variant=A|B|C. -->
+  <style>
+    :root {
+      color-scheme: light;
+      --canvas: #f6f8fa;
+      --surface: #ffffff;
+      --surface-muted: #f6f8fa;
+      --border: #d0d7de;
+      --border-muted: #d8dee4;
+      --text: #1f2328;
+      --muted: #59636e;
+      --blue: #0969da;
+      --green: #1a7f37;
+      --purple: #8250df;
+      --orange: #bc4c00;
+      --danger: #cf222e;
+      --focus: #0969da;
+      --switcher: #24292f;
+      --switcher-text: #ffffff;
+      --shadow: 0 8px 24px rgba(140, 149, 159, 0.24);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--surface);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    a {
+      color: var(--blue);
+      text-decoration-thickness: 1px;
+      text-underline-offset: 0.18em;
+    }
+
+    a:hover { text-decoration: underline; }
+
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    :focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--focus) 45%, transparent);
+      outline-offset: 2px;
+    }
+
+    ::selection {
+      color: #ffffff;
+      background: var(--blue);
+    }
+
+    code, .mono {
+      font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", monospace;
+      font-size: 0.92em;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+      flex: 0 0 auto;
+    }
+
+    .site-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      min-height: 64px;
+      padding: 12px 24px;
+      color: #ffffff;
+      background: #25292e;
+    }
+
+    .mark {
+      display: grid;
+      width: 32px;
+      height: 32px;
+      place-items: center;
+      color: #25292e;
+      background: #ffffff;
+      border-radius: 50%;
+    }
+
+    .mark svg { width: 21px; height: 21px; }
+
+    .repo-search {
+      width: min(350px, 32vw);
+      min-height: 34px;
+      padding: 6px 12px;
+      color: #ffffff;
+      background: #25292e;
+      border: 1px solid #57606a;
+      border-radius: 6px;
+    }
+
+    .repo-search::placeholder { color: #b6bec8; }
+
+    .header-spacer { flex: 1; }
+
+    .header-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      color: #ffffff;
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .repo-masthead {
+      padding: 20px max(24px, calc((100vw - 1280px) / 2));
+      background: var(--canvas);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .repo-title {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 18px;
+      color: var(--blue);
+      font-size: 20px;
+      font-weight: 400;
+    }
+
+    .repo-title strong { font-weight: 600; }
+
+    .visibility {
+      padding: 1px 7px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: -21px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 8px 12px 12px;
+      color: var(--text);
+      border-bottom: 2px solid transparent;
+      white-space: nowrap;
+      text-decoration: none;
+    }
+
+    .tab.active {
+      border-bottom-color: #fd8c73;
+      font-weight: 600;
+    }
+
+    .prototype {
+      min-height: calc(100vh - 150px);
+      animation: reveal 240ms cubic-bezier(.2, .8, .2, 1);
+    }
+
+    @keyframes reveal {
+      from { opacity: 0.75; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .repo-shell {
+      width: min(1280px, calc(100% - 40px));
+      margin: 24px auto 120px;
+    }
+
+    .repo-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .branch-button, .ghost-button, .code-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 32px;
+      padding: 5px 12px;
+      color: var(--text);
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font: inherit;
+      font-weight: 600;
+    }
+
+    .code-button {
+      margin-left: auto;
+      color: #ffffff;
+      background: var(--green);
+      border-color: rgba(27, 31, 36, 0.15);
+    }
+
+    .file-table {
+      overflow: hidden;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .file-row {
+      display: grid;
+      grid-template-columns: minmax(180px, 1.2fr) minmax(180px, 1.8fr) 90px;
+      gap: 16px;
+      align-items: center;
+      min-height: 41px;
+      padding: 7px 16px;
+      border-top: 1px solid var(--border-muted);
+    }
+
+    .file-row:first-child {
+      background: var(--surface-muted);
+      border-top: 0;
+    }
+
+    .file-name {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--blue);
+      font-weight: 600;
+    }
+
+    .file-message, .file-age {
+      overflow: hidden;
+      color: var(--muted);
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .readme {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .readme-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 8px 16px;
+      background: var(--surface-muted);
+      border-bottom: 1px solid var(--border);
+      font-weight: 600;
+    }
+
+    .markdown {
+      max-width: 940px;
+      padding: 34px 44px 58px;
+    }
+
+    .markdown h1, .markdown h2, .markdown h3 {
+      line-height: 1.25;
+      letter-spacing: -0.02em;
+    }
+
+    .markdown h1 {
+      margin: 0 0 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border-muted);
+      font-size: clamp(30px, 4vw, 44px);
+    }
+
+    .markdown h2 {
+      margin: 36px 0 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border-muted);
+      font-size: 24px;
+    }
+
+    .markdown h3 { margin: 24px 0 8px; font-size: 18px; }
+
+    .lede {
+      max-width: 68ch;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .notice {
+      margin: 20px 0;
+      padding: 14px 16px;
+      color: #3b2e00;
+      background: #fff8c5;
+      border: 1px solid #d4a72c;
+      border-radius: 6px;
+    }
+
+    .command {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 12px 0;
+      padding: 13px 16px;
+      overflow-x: auto;
+      color: #ffffff;
+      background: #24292f;
+      border-radius: 6px;
+      scrollbar-width: thin;
+    }
+
+    .command::before {
+      content: "$";
+      color: #79c0ff;
+      user-select: none;
+    }
+
+    .tool-table {
+      width: 100%;
+      margin: 16px 0 26px;
+      border-collapse: collapse;
+    }
+
+    .tool-table th, .tool-table td {
+      padding: 11px 13px;
+      text-align: left;
+      vertical-align: top;
+      border: 1px solid var(--border);
+    }
+
+    .tool-table th { background: var(--surface-muted); }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 7px;
+      border: 1px solid currentColor;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .badge.plugin { color: var(--purple); }
+    .badge.skill { color: var(--blue); }
+    .badge.library { color: var(--orange); }
+    .badge.pending { color: var(--muted); border-style: dashed; }
+
+    .boundary {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      gap: 18px;
+      align-items: center;
+      margin: 24px 0;
+      padding: 20px;
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .boundary strong { display: block; margin-bottom: 6px; }
+    .boundary-arrow { color: var(--muted); font-size: 22px; }
+
+    /* Variant B */
+    .catalog-layout {
+      display: grid;
+      grid-template-columns: 230px minmax(0, 1fr);
+      gap: 28px;
+    }
+
+    .catalog-nav {
+      position: sticky;
+      top: 16px;
+      align-self: start;
+      padding: 8px 0;
+      border-right: 1px solid var(--border);
+    }
+
+    .catalog-nav h2 {
+      margin: 0 16px 10px 0;
+      font-size: 14px;
+    }
+
+    .catalog-nav a {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 36px;
+      margin-right: 16px;
+      padding: 7px 10px;
+      color: var(--text);
+      border-radius: 6px;
+      text-decoration: none;
+    }
+
+    .catalog-nav a.active {
+      background: #ddf4ff;
+      font-weight: 600;
+    }
+
+    .count {
+      min-width: 24px;
+      padding: 0 6px;
+      color: var(--muted);
+      background: rgba(175, 184, 193, 0.2);
+      border-radius: 999px;
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .catalog-heading {
+      display: flex;
+      gap: 18px;
+      align-items: end;
+      justify-content: space-between;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .catalog-heading h1 {
+      margin: 0 0 5px;
+      font-size: 30px;
+      letter-spacing: -0.03em;
+    }
+
+    .catalog-heading p { margin: 0; color: var(--muted); }
+
+    .catalog-search {
+      width: min(320px, 38vw);
+      min-height: 36px;
+      padding: 7px 11px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font: inherit;
+    }
+
+    .catalog-group { margin-top: 30px; }
+
+    .catalog-group-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 8px;
+    }
+
+    .catalog-group-header h2 { margin: 0; font-size: 20px; }
+    .catalog-group-header span { color: var(--muted); }
+
+    .catalog-item {
+      display: grid;
+      grid-template-columns: minmax(180px, 0.9fr) minmax(220px, 1.6fr) minmax(180px, 1fr);
+      gap: 22px;
+      padding: 18px 4px;
+      border-top: 1px solid var(--border-muted);
+    }
+
+    .catalog-item h3 { margin: 0 0 7px; font-size: 16px; }
+    .catalog-item p { margin: 0; color: var(--muted); }
+
+    .item-type { margin-top: 8px; }
+
+    .install-line {
+      padding: 9px 11px;
+      overflow-x: auto;
+      background: var(--surface-muted);
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+
+    /* Variant C */
+    .playbook-intro {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(270px, 0.8fr);
+      gap: 36px;
+      align-items: center;
+      padding: 34px 0 38px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .playbook-intro h1 {
+      max-width: 780px;
+      margin: 0 0 12px;
+      font-size: clamp(34px, 5vw, 60px);
+      line-height: 1.08;
+      letter-spacing: -0.04em;
+    }
+
+    .playbook-intro p {
+      max-width: 65ch;
+      margin: 0;
+      color: var(--muted);
+      font-size: 18px;
+    }
+
+    .setup-summary {
+      padding: 18px;
+      background: var(--surface-muted);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+    }
+
+    .setup-summary strong { display: block; margin-bottom: 10px; }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 6px 0;
+      border-top: 1px solid var(--border-muted);
+    }
+
+    .summary-row:first-of-type { border-top: 0; }
+
+    .journey {
+      display: grid;
+      grid-template-columns: 150px minmax(0, 1fr);
+      gap: 30px;
+      padding: 34px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .journey-label {
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    .journey-content h2 {
+      margin: 0 0 8px;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .journey-content > p {
+      max-width: 68ch;
+      margin: 0 0 18px;
+      color: var(--muted);
+    }
+
+    .stack-list { border-top: 1px solid var(--border); }
+
+    .stack-row {
+      display: grid;
+      grid-template-columns: minmax(170px, 0.8fr) minmax(220px, 1.4fr) auto;
+      gap: 18px;
+      align-items: center;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border-muted);
+    }
+
+    .stack-row strong { display: block; }
+    .stack-row small { color: var(--muted); }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .status::before {
+      width: 8px;
+      height: 8px;
+      background: var(--green);
+      border-radius: 50%;
+      content: "";
+    }
+
+    .status.pending::before { background: #bf8700; }
+
+    .prototype-switcher {
+      position: fixed;
+      z-index: 20;
+      left: 50%;
+      bottom: 24px;
+      display: grid;
+      grid-template-columns: 42px minmax(210px, auto) 42px;
+      align-items: center;
+      overflow: hidden;
+      color: var(--switcher-text);
+      background: var(--switcher);
+      border: 1px solid #57606a;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      transform: translateX(-50%);
+    }
+
+    .prototype-switcher button {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      padding: 0;
+      place-items: center;
+      color: var(--switcher-text);
+      background: transparent;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .prototype-switcher button:hover { background: #3b434b; }
+    .prototype-label { padding: 0 14px; text-align: center; font-weight: 600; }
+    .prototype-label small { display: block; color: #b6bec8; font-weight: 400; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    @media (max-width: 760px) {
+      .site-header { padding: 10px 16px; }
+      .repo-search, .header-link span { display: none; }
+      .repo-masthead { padding: 16px 16px 18px; }
+      .repo-shell { width: calc(100% - 24px); margin-top: 16px; }
+      .file-row { grid-template-columns: 1fr 70px; }
+      .file-message { display: none; }
+      .markdown { padding: 24px 20px 48px; }
+      .boundary { grid-template-columns: 1fr; }
+      .boundary-arrow { transform: rotate(90deg); }
+      .catalog-layout { grid-template-columns: 1fr; }
+      .catalog-nav {
+        position: static;
+        display: flex;
+        gap: 6px;
+        padding: 0 0 12px;
+        overflow-x: auto;
+        border-right: 0;
+        border-bottom: 1px solid var(--border);
+      }
+      .catalog-nav h2 { display: none; }
+      .catalog-nav a { margin: 0; white-space: nowrap; }
+      .catalog-heading { display: block; }
+      .catalog-search { width: 100%; margin-top: 16px; }
+      .catalog-item { grid-template-columns: 1fr; gap: 8px; }
+      .playbook-intro { grid-template-columns: 1fr; }
+      .journey { grid-template-columns: 1fr; gap: 8px; }
+      .stack-row { grid-template-columns: 1fr; gap: 6px; }
+      .prototype-switcher {
+        bottom: 12px;
+        grid-template-columns: 42px minmax(170px, auto) 42px;
+      }
+      .prototype-label small { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .prototype { animation: none; }
+    }
+  </style>
+</head>
+<body>
+  <svg class="sr-only" aria-hidden="true">
+    <symbol id="icon-repo" viewBox="0 0 16 16">
+      <path d="M2 2.75A1.75 1.75 0 0 1 3.75 1h8.5A1.75 1.75 0 0 1 14 2.75v10.5A1.75 1.75 0 0 1 12.25 15h-8.5A1.75 1.75 0 0 1 2 13.25Zm1.5 0v7.5c.36-.16.76-.25 1.18-.25H12.5V2.75a.25.25 0 0 0-.25-.25h-8.5a.25.25 0 0 0-.25.25Zm1.18 8.75a1.18 1.18 0 0 0 0 2.36h7.57a.25.25 0 0 0 .25-.25V11.5Z"/>
+    </symbol>
+    <symbol id="icon-file" viewBox="0 0 16 16">
+      <path d="M3.75 1h5.5L13 4.75v8.5A1.75 1.75 0 0 1 11.25 15h-7.5A1.75 1.75 0 0 1 2 13.25V2.75A1.75 1.75 0 0 1 3.75 1Zm0 1.5a.25.25 0 0 0-.25.25v10.5c0 .14.11.25.25.25h7.5a.25.25 0 0 0 .25-.25V5.5H9.25A.75.75 0 0 1 8.5 4.75V2.5Z"/>
+    </symbol>
+    <symbol id="icon-folder" viewBox="0 0 16 16">
+      <path d="M1.75 2h4l1.5 1.5h7A1.75 1.75 0 0 1 16 5.25v7A1.75 1.75 0 0 1 14.25 14H1.75A1.75 1.75 0 0 1 0 12.25v-8.5A1.75 1.75 0 0 1 1.75 2Zm0 1.5a.25.25 0 0 0-.25.25v8.5c0 .14.11.25.25.25h12.5a.25.25 0 0 0 .25-.25v-7a.25.25 0 0 0-.25-.25H6.63L5.13 3.5Z"/>
+    </symbol>
+    <symbol id="icon-code" viewBox="0 0 16 16">
+      <path d="m5.47 3.22 1.06 1.06L2.81 8l3.72 3.72-1.06 1.06L.69 8Zm5.06 0L15.31 8l-4.78 4.78-1.06-1.06L13.19 8 9.47 4.28Z"/>
+    </symbol>
+  </svg>
+
+  <header class="site-header">
+    <span class="mark" aria-label="GitHub prototype">
+      <svg><use href="#icon-repo"></use></svg>
+    </span>
+    <input class="repo-search" aria-label="Search prototype" placeholder="Type / to search">
+    <span class="header-spacer"></span>
+    <a class="header-link" href="#">
+      <svg><use href="#icon-code"></use></svg>
+      <span>Prototype only</span>
+    </a>
+  </header>
+
+  <section class="repo-masthead">
+    <h1 class="repo-title">
+      <svg><use href="#icon-repo"></use></svg>
+      <span>KalebCole / <strong>agent-toolkit</strong></span>
+      <span class="visibility">Public</span>
+    </h1>
+    <nav class="tabs" aria-label="Repository">
+      <a class="tab active" href="#"><svg><use href="#icon-code"></use></svg>Code</a>
+      <a class="tab" href="#">Issues</a>
+      <a class="tab" href="#">Pull requests</a>
+      <a class="tab" href="#">Actions</a>
+      <a class="tab" href="#">Security</a>
+      <a class="tab" href="#">Insights</a>
+    </nav>
+  </section>
+
+  <main id="prototype-root" class="prototype"></main>
+
+  <nav class="prototype-switcher" aria-label="Prototype variants">
+    <button id="previous-variant" type="button" aria-label="Previous variant">←</button>
+    <div class="prototype-label" aria-live="polite">
+      <span id="variant-title"></span>
+      <small>Use left and right arrow keys</small>
+    </div>
+    <button id="next-variant" type="button" aria-label="Next variant">→</button>
+  </nav>
+
+  <template id="variant-A">
+    <div class="repo-shell">
+      <div class="repo-actions">
+        <button class="branch-button" type="button">main ▾</button>
+        <button class="ghost-button" type="button">Go to file</button>
+        <button class="code-button" type="button">Code ▾</button>
+      </div>
+      <div class="file-table" aria-label="Repository files">
+        <div class="file-row">
+          <strong>KalebCole</strong>
+          <span class="file-message">Clarify plugin and catalog boundary</span>
+          <span class="file-age">now</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name"><svg><use href="#icon-folder"></use></svg>catalog</span>
+          <span class="file-message">Curate upstream entries by type</span>
+          <span class="file-age">2 days ago</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name"><svg><use href="#icon-folder"></use></svg>plugin</span>
+          <span class="file-message">Reserve first-party package boundary</span>
+          <span class="file-age">2 days ago</span>
+        </div>
+        <div class="file-row">
+          <span class="file-name"><svg><use href="#icon-file"></use></svg>README.md</span>
+          <span class="file-message">Explain Agent Toolkit in one page</span>
+          <span class="file-age">now</span>
+        </div>
+      </div>
+
+      <article class="readme">
+        <div class="readme-bar"><svg><use href="#icon-file"></use></svg>README.md</div>
+        <div class="markdown">
+          <h1>Agent Toolkit</h1>
+          <p class="lede">My dotfiles for agents: the plugins, skills, and command-line tools that earn a place in my daily setup—documented so you can borrow only what helps.</p>
+          <div class="notice"><strong>Nothing here silently installs everything.</strong> The Agent Toolkit plugin is first-party. Every catalog entry stays upstream and is installed separately.</div>
+
+          <h2>Start with my daily stack</h2>
+          <table class="tool-table">
+            <thead><tr><th>Entry</th><th>Type</th><th>Why it stays</th><th>Install</th></tr></thead>
+            <tbody>
+              <tr><td><a href="https://github.com/blader/humanizer">humanizer</a></td><td><span class="badge plugin">Plugin</span></td><td>Removes mechanical AI writing patterns.</td><td><code>humanizer@humanizer</code></td></tr>
+              <tr><td><a href="https://github.com/mvanhorn/cli-printing-press">cli-printing-press</a></td><td><span class="badge plugin">Plugin</span></td><td>Turns CLI work into durable written artifacts.</td><td><code>mvanhorn/cli-printing-press</code></td></tr>
+              <tr><td><a href="https://github.com/mattpocock/skills">mattpocock-skills</a></td><td><span class="badge plugin">Plugin</span></td><td>The engineering workflows behind this toolkit.</td><td><code>mattpocock/skills</code></td></tr>
+            </tbody>
+          </table>
+
+          <h2>Browse by craft</h2>
+          <h3>Frontend</h3>
+          <p>Things I reach for when an agent needs to reason about interface quality—not one undifferentiated “plugin” bucket.</p>
+          <table class="tool-table">
+            <tbody>
+              <tr><td><a href="https://github.com/oil-oil/oil-motion">oil-motion</a></td><td><span class="badge library">Library</span></td><td>Interactive web animation reference</td></tr>
+              <tr><td><a href="https://github.com/will-ness-ai/skills/blob/main/skills/grill-design/SKILL.md">grill-design</a></td><td><span class="badge skill">Skill</span></td><td>Interrogate a design before building it</td></tr>
+              <tr><td><a href="https://github.com/pbakaus/impeccable">impeccable</a></td><td><span class="badge pending">Classify</span></td><td>Design language and workflow candidate</td></tr>
+            </tbody>
+          </table>
+
+          <h2>Two different promises</h2>
+          <div class="boundary">
+            <div><strong>Agent Toolkit plugin</strong><span>Small, installable, and maintained here. Only Kaleb-owned capabilities belong inside it.</span></div>
+            <span class="boundary-arrow" aria-hidden="true">≠</span>
+            <div><strong>Agent Toolkit catalog</strong><span>Links to external tools. You choose each upstream install yourself.</span></div>
+          </div>
+        </div>
+      </article>
+    </div>
+  </template>
+
+  <template id="variant-B">
+    <div class="repo-shell">
+      <div class="repo-actions">
+        <button class="branch-button" type="button">main ▾</button>
+        <span class="mono">catalog/README.md</span>
+        <button class="code-button" type="button">Code ▾</button>
+      </div>
+      <div class="catalog-layout">
+        <aside class="catalog-nav" aria-label="Catalog sections">
+          <h2>Catalog</h2>
+          <a class="active" href="#">Everything <span class="count">7</span></a>
+          <a href="#">Plugins <span class="count">4</span></a>
+          <a href="#">Skills <span class="count">1</span></a>
+          <a href="#">CLIs <span class="count">0</span></a>
+          <a href="#">Frontend <span class="count">3</span></a>
+          <a href="#">Under review <span class="count">2</span></a>
+        </aside>
+
+        <section>
+          <header class="catalog-heading">
+            <div>
+              <h1>Toolkit catalog</h1>
+              <p>Canonical upstreams, honest types, explicit installs.</p>
+            </div>
+            <input class="catalog-search" aria-label="Filter catalog" placeholder="Filter by name or purpose">
+          </header>
+
+          <section class="catalog-group">
+            <div class="catalog-group-header"><h2>Daily plugins</h2><span>Confirmed</span></div>
+            <article class="catalog-item">
+              <div><h3><a href="https://github.com/blader/humanizer">humanizer</a></h3><span class="badge plugin item-type">Plugin</span></div>
+              <p>Human-focused writing cleanup. Canonical source: <span class="mono">blader/humanizer</span>.</p>
+              <code class="install-line">humanizer@humanizer</code>
+            </article>
+            <article class="catalog-item">
+              <div><h3><a href="https://github.com/mvanhorn/cli-printing-press">cli-printing-press</a></h3><span class="badge plugin item-type">Plugin</span></div>
+              <p>Structured writing workflows from the command line.</p>
+              <code class="install-line">mvanhorn/cli-printing-press</code>
+            </article>
+            <article class="catalog-item">
+              <div><h3><a href="https://github.com/mattpocock/skills">mattpocock-skills</a></h3><span class="badge plugin item-type">Plugin</span></div>
+              <p>Planning, research, prototyping, and engineering workflows.</p>
+              <code class="install-line">mattpocock/skills</code>
+            </article>
+          </section>
+
+          <section class="catalog-group">
+            <div class="catalog-group-header"><h2>Frontend craft</h2><span>Mixed types</span></div>
+            <article class="catalog-item">
+              <div><h3><a href="https://github.com/oil-oil/oil-motion">oil-motion</a></h3><span class="badge library item-type">Library</span></div>
+              <p>Smooth interactive web animations. It can belong in the toolkit without pretending to be a Copilot plugin.</p>
+              <code class="install-line">upstream link</code>
+            </article>
+            <article class="catalog-item">
+              <div><h3><a href="https://github.com/will-ness-ai/skills/blob/main/skills/grill-design/SKILL.md">grill-design</a></h3><span class="badge skill item-type">Skill</span></div>
+              <p>A standalone design-grilling skill from the upstream skills repository.</p>
+              <code class="install-line">SKILL.md</code>
+            </article>
+            <article class="catalog-item">
+              <div><h3><a href="https://github.com/pbakaus/impeccable">impeccable</a></h3><span class="badge pending item-type">Classify</span></div>
+              <p>Desired frontend entry. Exact package boundary and install path still need verification.</p>
+              <code class="install-line">decision pending</code>
+            </article>
+          </section>
+
+          <section class="catalog-group">
+            <div class="catalog-group-header"><h2>Under review</h2><span>Not yet recommended</span></div>
+            <article class="catalog-item">
+              <div><h3><a href="https://github.com/obra/superpowers">superpowers</a></h3><span class="badge pending item-type">Decision</span></div>
+              <p>Occasionally useful, but not yet confirmed as part of the important set.</p>
+              <code class="install-line">grilling ticket open</code>
+            </article>
+          </section>
+        </section>
+      </div>
+    </div>
+  </template>
+
+  <template id="variant-C">
+    <div class="repo-shell">
+      <div class="repo-actions">
+        <button class="branch-button" type="button">main ▾</button>
+        <span class="mono">README.md</span>
+        <button class="code-button" type="button">Code ▾</button>
+      </div>
+
+      <section class="playbook-intro">
+        <div>
+          <h1>Borrow the setup, not the whole machine.</h1>
+          <p>Agent Toolkit organizes a real working stack into small, inspectable paths. Start with the job you are trying to do, then install only the upstream tools that earn their place.</p>
+        </div>
+        <aside class="setup-summary">
+          <strong>Current public profile</strong>
+          <div class="summary-row"><span>Daily plugins</span><b>3</b></div>
+          <div class="summary-row"><span>Frontend entries</span><b>3</b></div>
+          <div class="summary-row"><span>Pending decisions</span><b>2</b></div>
+          <div class="summary-row"><span>Bundled externals</span><b>0</b></div>
+        </aside>
+      </section>
+
+      <section class="journey">
+        <div class="journey-label">Path: daily work</div>
+        <div class="journey-content">
+          <h2>Set up the dependable core</h2>
+          <p>These are the entries Kaleb explicitly confirmed. Each stays upstream and can be installed independently.</p>
+          <div class="stack-list">
+            <div class="stack-row">
+              <div><strong>humanizer</strong><small>Native plugin</small></div>
+              <code>humanizer@humanizer</code>
+              <span class="status">Confirmed</span>
+            </div>
+            <div class="stack-row">
+              <div><strong>cli-printing-press</strong><small>Native plugin</small></div>
+              <code>mvanhorn/cli-printing-press</code>
+              <span class="status">Confirmed</span>
+            </div>
+            <div class="stack-row">
+              <div><strong>mattpocock-skills</strong><small>Native plugin</small></div>
+              <code>mattpocock/skills</code>
+              <span class="status">Confirmed</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="journey">
+        <div class="journey-label">Path: frontend</div>
+        <div class="journey-content">
+          <h2>Give an agent better design instincts</h2>
+          <p>This path mixes extension types on purpose. The repository says what each thing is before it tells you how to use it.</p>
+          <div class="stack-list">
+            <div class="stack-row">
+              <div><strong>oil-motion</strong><small>Animation library</small></div>
+              <a href="https://github.com/oil-oil/oil-motion">Open upstream</a>
+              <span class="status pending">Classify use</span>
+            </div>
+            <div class="stack-row">
+              <div><strong>grill-design</strong><small>Standalone skill</small></div>
+              <a href="https://github.com/will-ness-ai/skills/blob/main/skills/grill-design/SKILL.md">Read SKILL.md</a>
+              <span class="status">Known type</span>
+            </div>
+            <div class="stack-row">
+              <div><strong>impeccable</strong><small>Frontend toolkit candidate</small></div>
+              <a href="https://github.com/pbakaus/impeccable">Open upstream</a>
+              <span class="status pending">Verify install</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="journey">
+        <div class="journey-label">Path: explore</div>
+        <div class="journey-content">
+          <h2>Keep occasional tools honest</h2>
+          <p>A tool can stay visible without being presented as essential. Superpowers remains in review until its role is clear.</p>
+          <div class="stack-list">
+            <div class="stack-row">
+              <div><strong>superpowers</strong><small>Native plugin</small></div>
+              <a href="https://github.com/obra/superpowers">Review upstream</a>
+              <span class="status pending">Decision open</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </template>
+
+  <script>
+    const variants = [
+      { key: "A", name: "README-first" },
+      { key: "B", name: "Catalog-first" },
+      { key: "C", name: "Workflow-first" }
+    ];
+
+    const root = document.querySelector("#prototype-root");
+    const title = document.querySelector("#variant-title");
+
+    function currentIndex() {
+      const requested = new URL(window.location.href).searchParams.get("variant")?.toUpperCase();
+      const index = variants.findIndex((variant) => variant.key === requested);
+      return index >= 0 ? index : 0;
+    }
+
+    function render(index, updateUrl = false) {
+      const variant = variants[index];
+      const template = document.querySelector(`#variant-${variant.key}`);
+      root.replaceChildren(template.content.cloneNode(true));
+      title.textContent = `${variant.key} — ${variant.name}`;
+      document.title = `${variant.name} · Agent Toolkit prototype`;
+
+      if (updateUrl) {
+        const url = new URL(window.location.href);
+        url.searchParams.set("variant", variant.key);
+        window.history.replaceState({}, "", url);
+      }
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function cycle(offset) {
+      const index = (currentIndex() + offset + variants.length) % variants.length;
+      render(index, true);
+    }
+
+    document.querySelector("#previous-variant").addEventListener("click", () => cycle(-1));
+    document.querySelector("#next-variant").addEventListener("click", () => cycle(1));
+
+    document.addEventListener("keydown", (event) => {
+      const target = event.target;
+      const editing = target.matches("input, textarea, [contenteditable='true']");
+      if (editing) return;
+      if (event.key === "ArrowLeft") cycle(-1);
+      if (event.key === "ArrowRight") cycle(1);
+    });
+
+    window.addEventListener("popstate", () => render(currentIndex()));
+    render(currentIndex());
+  </script>
+</body>
+</html>
