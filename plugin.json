@@ -1,0 +1,17 @@
+{
+  "name": "agent-toolkit",
+  "description": "Kaleb's source-first collection assembled from component packages.",
+  "version": "0.0.0-prototype",
+  "author": {
+    "name": "Kaleb Cole",
+    "url": "https://github.com/KalebCole"
+  },
+  "repository": "https://github.com/KalebCole/agent-toolkit",
+  "skills": [
+    "components/example-workflow/skill/"
+  ],
+  "agents": [
+    "components/example-reviewer/agents/"
+  ],
+  "hooks": "components/safe-boundaries/hooks.json"
+}
