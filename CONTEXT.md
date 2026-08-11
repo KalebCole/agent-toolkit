@@ -17,13 +17,12 @@ agents, and hooks.
 _Avoid_: Catalog plugin, universal manifest
 
 **Canvas Extension**:
-A personal GitHub Copilot app extension that provides a shared interactive
-surface for human-agent work and is installed in the user's Copilot extension
-space.
+A GitHub Copilot app-specific extension that provides a shared interactive
+surface for human-agent work. Canvas Extensions are outside Agent Toolkit v0
+because neither GitHub Copilot CLI nor Hermes provides that visual surface.
 _Avoid_: Canvas, web page
 
 **External Recommendation**:
 A canonical upstream tool that Agent Toolkit recommends without copying,
 bundling, or silently installing it.
 _Avoid_: Included plugin, vendored tool
-
