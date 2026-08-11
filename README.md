@@ -37,22 +37,29 @@ agent-toolkit/
     └── frontend/
 ```
 
-## Upstream Copilot plugins
+## Curated Copilot marketplace
 
-The Agent Toolkit marketplace points to plugins maintained in their original
-repositories:
+The Agent Toolkit marketplace distributes plugins I trust while keeping their
+source and authorship at the original repositories:
 
-- [`humanizer`](https://github.com/blader/humanizer), by blader
-- [`cli-printing-press`](https://github.com/mvanhorn/cli-printing-press), by
-  mvanhorn
-- [`mattpocock-skills`](https://github.com/mattpocock/skills), by Matt Pocock
+- **External** — [`humanizer`](https://github.com/blader/humanizer), maintained
+  by blader
+- **External** —
+  [`cli-printing-press`](https://github.com/mvanhorn/cli-printing-press),
+  maintained by mvanhorn
+- **External** —
+  [`mattpocock-skills`](https://github.com/mattpocock/skills), maintained by
+  Matt Pocock
 
 ```bash
 copilot plugin marketplace add KalebCole/agent-toolkit
 copilot plugin marketplace browse agent-toolkit
+copilot plugin install humanizer@agent-toolkit
 ```
 
-Each plugin remains an individual choice. Agent Toolkit does not bundle it, and
+Registering the marketplace installs nothing. Each plugin remains an individual
+choice. An installed entry uses the `plugin@agent-toolkit` name, but its
+`author`, `repository`, and `source` metadata point to the upstream maintainer.
 Copilot's native plugin lifecycle remains responsible for updates.
 
 ## Other upstream references
