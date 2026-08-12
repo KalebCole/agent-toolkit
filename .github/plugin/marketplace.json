@@ -5,60 +5,68 @@
   },
   "metadata": {
     "description": "Kaleb's curated GitHub Copilot CLI plugins.",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "plugins": [
     {
       "name": "mattpocock-skills",
-      "description": "External · Live upstream. Engineering workflows maintained by Matt Pocock.",
+      "description": "External · Pinned source. Engineering workflows maintained by Matt Pocock.",
       "source": {
         "source": "github",
-        "repo": "mattpocock/skills"
+        "repo": "mattpocock/skills",
+        "sha": "84fdeffd12f2ee307994d1eb6feb48173b6e0502"
       },
       "author": {
         "name": "Matt Pocock",
         "url": "https://github.com/mattpocock"
       },
-      "repository": "https://github.com/mattpocock/skills"
+      "repository": "https://github.com/mattpocock/skills",
+      "category": "engineering"
     },
     {
       "name": "humanizer",
-      "description": "External · Live upstream. Natural writing workflow maintained by blader.",
+      "description": "External · Pinned source. Natural writing workflow maintained by blader.",
       "source": {
         "source": "github",
-        "repo": "blader/humanizer"
+        "repo": "blader/humanizer",
+        "sha": "523374dee72d67c7b2b5f858ea0094ffda49c3ac"
       },
       "author": {
         "name": "blader",
         "url": "https://github.com/blader"
       },
-      "repository": "https://github.com/blader/humanizer"
+      "repository": "https://github.com/blader/humanizer",
+      "category": "writing"
     },
     {
       "name": "cli-printing-press",
-      "description": "External · Live upstream. Agent-friendly CLI generator maintained by mvanhorn. Requires its Go binary.",
+      "description": "External · Pinned source. Agent-friendly CLI generator maintained by mvanhorn. Requires its Go binary.",
       "source": {
         "source": "github",
-        "repo": "mvanhorn/cli-printing-press"
+        "repo": "mvanhorn/cli-printing-press",
+        "sha": "128f67631ef5116dbe382ce2cfc758084675b779"
       },
       "author": {
         "name": "mvanhorn",
         "url": "https://github.com/mvanhorn"
       },
-      "repository": "https://github.com/mvanhorn/cli-printing-press"
+      "repository": "https://github.com/mvanhorn/cli-printing-press",
+      "category": "cli"
     },
     {
       "name": "superpowers",
-      "description": "External · Live upstream. Optional prescriptive engineering workflows maintained by Jesse Vincent.",
+      "description": "External · Pinned source. Optional prescriptive engineering workflows maintained by Jesse Vincent.",
       "source": {
         "source": "github",
-        "repo": "obra/superpowers"
+        "repo": "obra/superpowers",
+        "sha": "44c9b2d6e889982ac18c27d05a19fefe335194e1"
       },
       "author": {
         "name": "Jesse Vincent",
         "url": "https://github.com/obra"
       },
-      "repository": "https://github.com/obra/superpowers"
+      "repository": "https://github.com/obra/superpowers",
+      "category": "engineering"
     }
   ]
 }

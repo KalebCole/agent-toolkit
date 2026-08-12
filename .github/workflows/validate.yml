@@ -1,0 +1,28 @@
+name: Validate marketplace
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Copilot CLI
+        run: npm install --global @github/copilot
+
+      - name: Validate catalog and pinned installs
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash scripts/validate-marketplace.sh

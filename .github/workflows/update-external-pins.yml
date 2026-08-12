@@ -1,0 +1,83 @@
+name: Update external pins
+
+on:
+  schedule:
+    - cron: "17 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: external-pin-updates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Update source pins
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/catalog.mjs update
+
+      - name: Detect changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install Copilot CLI
+        if: steps.changes.outputs.changed == 'true'
+        run: npm install --global @github/copilot
+
+      - name: Validate updated catalog
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: bash scripts/validate-marketplace.sh
+
+      - name: Open and merge update pull request
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          branch="automation/external-pins"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add .github/plugin/marketplace.json plugins frontend
+          git commit -m "Update external source pins"
+          git push --force origin "HEAD:$branch"
+
+          pr_url="$(gh pr list --head "$branch" --json url --jq '.[0].url')"
+          if [[ -z "$pr_url" ]]; then
+            pr_url="$(gh pr create \
+              --base main \
+              --head "$branch" \
+              --title "Update external source pins" \
+              --body "Automated source-pin update. Catalog validation and clean Copilot installs passed before this pull request was opened.")"
+          fi
+
+          for attempt in 1 2 3 4 5; do
+            if gh pr merge "$pr_url" --squash --delete-branch; then
+              exit 0
+            fi
+            sleep 5
+          done
+
+          echo "Pull request did not become mergeable." >&2
+          exit 1

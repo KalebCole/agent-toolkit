@@ -1,0 +1,18 @@
+{
+  "name": "grill-design",
+  "kind": "reference",
+  "category": "frontend",
+  "order": 2,
+  "use": "Design grilling skill",
+  "source": {
+    "source": "github",
+    "repo": "will-ness-ai/skills",
+    "branch": "main",
+    "sha": "446635a42d3624fa4b36dfb03f589803999082e1",
+    "path": "skills/grill-design"
+  },
+  "author": {
+    "name": "Will Ness",
+    "url": "https://github.com/will-ness-ai"
+  }
+}

@@ -1,8 +1,7 @@
 # Agent Toolkit
 
-Agent Toolkit is a curated distribution point for credited external plugins.
-It will also become a source-first portfolio of Kaleb-maintained components
-when public-safe owned source is ready.
+Agent Toolkit is a folder-first collection of agent tools and a curated
+distribution point for credited external plugins.
 
 ## Language
 
@@ -24,11 +23,20 @@ _Avoid_: Core Plugin v0, source bundle
 
 **External Plugin**:
 A plugin listed by the Curated Marketplace but authored, sourced, and updated
-from its canonical upstream repository. Marketplace v0 entries follow live,
-unpinned upstream source.
+from its Source Repository. Agent Toolkit pins each plugin to an exact commit.
 _Avoid_: Agent Toolkit plugin, included source
 
-**Upstream Reference**:
-A pointer-only portfolio entry for a useful external tool that cannot be listed
-through the Copilot marketplace.
-_Avoid_: Vendored tool, submodule
+**Catalog Entry**:
+One tool folder containing an `entry.json` file. It records identity,
+classification, authorship, Source Repository, and pinned source commit.
+_Avoid_: Pointer card, Markdown entry
+
+**Source Repository**:
+The external GitHub repository that owns and maintains a Catalog Entry's
+source. Agent Toolkit stores a pin and metadata, not a source copy.
+_Avoid_: Upstream, vendored repository
+
+**Pin Update**:
+An automated pull request that moves a Catalog Entry from one exact source
+commit to another after clean installation checks pass.
+_Avoid_: Source import, vendoring

@@ -1,0 +1,17 @@
+{
+  "name": "impeccable",
+  "kind": "reference",
+  "category": "frontend",
+  "order": 1,
+  "use": "Frontend design toolkit",
+  "source": {
+    "source": "github",
+    "repo": "pbakaus/impeccable",
+    "branch": "main",
+    "sha": "ae388ac58fb33aade50fc47e2be07c3192dcaabd"
+  },
+  "author": {
+    "name": "Paul Bakaus",
+    "url": "https://github.com/pbakaus"
+  }
+}

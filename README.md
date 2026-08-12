@@ -1,22 +1,31 @@
 # Agent Toolkit
 
-My curated GitHub Copilot CLI marketplace: the agent tools I use, installed
-from the repositories that own and maintain them.
+My folder-first collection of agent tools, with a GitHub Copilot CLI
+marketplace for installable plugins.
 
-Agent Toolkit does not copy external source. Each plugin is an individual
-choice and follows its live upstream repository.
+Each tool has its own folder and machine-readable `entry.json`. External source
+stays in the repository that owns it.
 
-## Marketplace
+## Browse
 
-| Plugin | Use | Source |
-|---|---|---|
-| `mattpocock-skills` | My primary engineering workflow | [mattpocock/skills](https://github.com/mattpocock/skills) |
-| `humanizer` | Make AI-assisted writing sound natural | [blader/humanizer](https://github.com/blader/humanizer) |
-| `cli-printing-press` | Build agent-friendly Go CLIs | [mvanhorn/cli-printing-press](https://github.com/mvanhorn/cli-printing-press) |
-| `superpowers` | Optional, more prescriptive engineering workflows | [obra/superpowers](https://github.com/obra/superpowers) |
+### Plugins
 
-All entries are **External · Live upstream**. Their authors own their source,
-releases, licenses, and future changes.
+- [`mattpocock-skills`](plugins/mattpocock-skills/) — my primary engineering
+  workflow
+- [`humanizer`](plugins/humanizer/) — make AI-assisted writing sound natural
+- [`cli-printing-press`](plugins/cli-printing-press/) — build agent-friendly Go
+  CLIs
+- [`superpowers`](plugins/superpowers/) — optional, more prescriptive
+  engineering workflows
+
+### Frontend
+
+- [`impeccable`](frontend/impeccable/) — frontend design toolkit
+- [`grill-design`](frontend/grill-design/) — design grilling skill
+- [`oil-motion`](frontend/oil-motion/) — responsive web animation library
+
+Each external entry is pinned to an exact source commit. The source authors own
+their code, releases, licenses, and future changes.
 
 ## Install
 
@@ -77,20 +86,33 @@ the following entry to your personal `~/.copilot/settings.json`:
 }
 ```
 
-This is a personal opt-in. Agent Toolkit cannot enable it for you. Because the
-entries follow live upstream sources, updates can include changes that Agent
-Toolkit has not reviewed.
+This is a personal opt-in. Agent Toolkit cannot enable it for you.
 
-## Other references
+## Automatic source updates
 
-[`upstream/`](upstream/) is a pointer-only bibliography for useful tools that
-do not fit the Copilot marketplace. It contains links, not mirrored source.
+A daily GitHub Actions workflow checks every entry's tracked branch. When a
+source commit changes, the workflow:
+
+1. updates the commit pin in the entry and generated marketplace;
+2. installs every pinned plugin in a clean Copilot configuration;
+3. opens a pull request; and
+4. merges the pull request after validation succeeds.
+
+Only pins and descriptive metadata live here. External source is not copied
+into Agent Toolkit. These updates are automated and are not human-reviewed.
+
+Run the same checks locally:
+
+```bash
+node scripts/catalog.mjs check
+bash scripts/validate-marketplace.sh
+```
 
 ## Release scope
 
 Marketplace v0 is verified with GitHub Copilot CLI. GitHub Copilot Desktop
 support is not claimed until its plugin behavior is tested.
 
-A later release will add a source-first Core Plugin after my public-safe skills,
-agents, and hooks are ready. This release contains no empty plugin or synthetic
-placeholder content.
+A later release will add my public-safe skills, agents, and hooks as real
+folders. This release contains no empty plugin or synthetic placeholder
+content.
