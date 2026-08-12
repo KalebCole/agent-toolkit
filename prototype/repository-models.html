@@ -1,0 +1,563 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agent Toolkit repository models</title>
+    <style>
+      :root {
+        color-scheme: light;
+        --ink: #18201c;
+        --muted: #59635d;
+        --paper: #f4f1e8;
+        --panel: #fffdf7;
+        --line: #d8d2c4;
+        --accent: #186b52;
+        --accent-soft: #dcece5;
+        --warn: #8a4b20;
+        font-family:
+          Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+          "Segoe UI", sans-serif;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        background: var(--paper);
+        color: var(--ink);
+      }
+
+      ::selection {
+        background: #b8dbc9;
+        color: #102119;
+      }
+
+      button:focus-visible {
+        outline: 3px solid #cf7638;
+        outline-offset: 3px;
+      }
+
+      main {
+        width: min(1120px, calc(100% - 32px));
+        margin: 0 auto;
+        padding: 64px 0 80px;
+      }
+
+      h1 {
+        max-width: 850px;
+        margin: 0;
+        font-size: clamp(2.3rem, 7vw, 5rem);
+        line-height: 0.96;
+        letter-spacing: -0.04em;
+      }
+
+      .intro {
+        max-width: 72ch;
+        margin: 24px 0 40px;
+        color: var(--muted);
+        font-size: 1.08rem;
+        line-height: 1.65;
+      }
+
+      .models {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+
+      .model {
+        min-height: 154px;
+        padding: 20px;
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+        color: inherit;
+        text-align: left;
+        cursor: pointer;
+      }
+
+      .model[aria-pressed="true"] {
+        border-color: var(--accent);
+        background: var(--accent-soft);
+        box-shadow: 0 12px 26px rgb(24 107 82 / 14%);
+      }
+
+      .model strong,
+      .model span {
+        display: block;
+      }
+
+      .model strong {
+        margin-bottom: 9px;
+        font-size: 1.08rem;
+      }
+
+      .model span {
+        color: var(--muted);
+        line-height: 1.45;
+      }
+
+      .workspace {
+        display: grid;
+        grid-template-columns: minmax(0, 1.5fr) minmax(280px, 0.8fr);
+        gap: 18px;
+        margin-top: 18px;
+      }
+
+      .tree-panel,
+      .state-panel,
+      .walkthroughs {
+        border: 1px solid var(--line);
+        border-radius: 14px;
+        background: var(--panel);
+      }
+
+      .tree-panel {
+        padding: 24px;
+      }
+
+      .panel-heading {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        gap: 16px;
+        margin-bottom: 20px;
+      }
+
+      h2,
+      h3,
+      p {
+        margin-top: 0;
+      }
+
+      h2 {
+        margin-bottom: 0;
+        font-size: 1.45rem;
+      }
+
+      .ownership {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      pre {
+        min-height: 360px;
+        margin: 0;
+        overflow: auto;
+        padding: 22px;
+        border-radius: 12px;
+        background: #19211d;
+        color: #e9f2ec;
+        font: 0.91rem/1.6 ui-monospace, SFMono-Regular, Consolas, monospace;
+        tab-size: 2;
+      }
+
+      .state-panel {
+        padding: 24px;
+      }
+
+      .metrics {
+        display: grid;
+        gap: 18px;
+        margin: 22px 0 28px;
+      }
+
+      .metric {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+      }
+
+      .metric span {
+        color: var(--muted);
+      }
+
+      .bar {
+        grid-column: 1 / -1;
+        height: 7px;
+        overflow: hidden;
+        border-radius: 7px;
+        background: #e4ded1;
+      }
+
+      .bar i {
+        display: block;
+        height: 100%;
+        background: var(--accent);
+      }
+
+      .verdict {
+        padding-top: 20px;
+        border-top: 1px solid var(--line);
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 9px;
+        margin-top: 18px;
+      }
+
+      .actions button,
+      .tabs button {
+        border: 1px solid var(--line);
+        border-radius: 999px;
+        background: var(--panel);
+        color: var(--ink);
+        padding: 10px 14px;
+        font: inherit;
+        font-weight: 650;
+        cursor: pointer;
+      }
+
+      .actions button:hover,
+      .tabs button:hover {
+        border-color: var(--accent);
+      }
+
+      .walkthroughs {
+        margin-top: 18px;
+        padding: 24px;
+      }
+
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+      }
+
+      .tabs button[aria-selected="true"] {
+        border-color: var(--accent);
+        background: var(--accent);
+        color: white;
+      }
+
+      .scenario {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+        gap: 24px;
+      }
+
+      .scenario p {
+        max-width: 70ch;
+        margin-bottom: 0;
+        color: var(--muted);
+        line-height: 1.55;
+      }
+
+      .scenario button {
+        border: 0;
+        border-radius: 10px;
+        background: var(--accent);
+        color: white;
+        padding: 12px 16px;
+        font: inherit;
+        font-weight: 750;
+        cursor: pointer;
+      }
+
+      .change {
+        margin: 14px 0 0;
+        color: var(--warn);
+        font-weight: 700;
+      }
+
+      @media (max-width: 820px) {
+        main {
+          padding-top: 36px;
+        }
+
+        .models,
+        .workspace {
+          grid-template-columns: 1fr;
+        }
+
+        .scenario {
+          grid-template-columns: 1fr;
+          align-items: start;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>How much source belongs in Agent Toolkit?</h1>
+      <p class="intro">
+        This throwaway prototype compares three repository rules. The question:
+        which rule stays obvious to a human and an agent while still making the
+        files you care about easy to browse?
+      </p>
+
+      <section class="models" aria-label="Repository models">
+        <button class="model" data-model="pointers" aria-pressed="false">
+          <strong>Metadata only</strong>
+          <span>Small and safe. Skill files remain in source repositories.</span>
+        </button>
+        <button class="model" data-model="mirrors" aria-pressed="false">
+          <strong>Complete mirrored plugins</strong>
+          <span>Every folder is installable and contains real skill files.</span>
+        </button>
+        <button class="model" data-model="hybrid" aria-pressed="false">
+          <strong>Owned source + external metadata</strong>
+          <span>Your files are local. Other authors keep their files remote.</span>
+        </button>
+      </section>
+
+      <section class="workspace">
+        <div class="tree-panel">
+          <div class="panel-heading">
+            <h2 id="model-name"></h2>
+            <span class="ownership" id="ownership"></span>
+          </div>
+          <pre id="tree" aria-live="polite"></pre>
+          <p class="change" id="change" aria-live="polite"></p>
+          <div class="actions">
+            <button data-action="inspect">Inspect a skill</button>
+            <button data-action="add-owned">Add your own skill</button>
+            <button data-action="source-update">Receive a source update</button>
+          </div>
+        </div>
+
+        <aside class="state-panel">
+          <h2>What the model costs</h2>
+          <div class="metrics" id="metrics"></div>
+          <p class="verdict" id="verdict"></p>
+        </aside>
+      </section>
+
+      <section class="walkthroughs">
+        <div class="tabs" role="tablist" aria-label="Guided walkthroughs">
+          <button role="tab" data-scenario="reader" aria-selected="true">
+            Human browses
+          </button>
+          <button role="tab" data-scenario="agent" aria-selected="false">
+            Agent installs
+          </button>
+          <button role="tab" data-scenario="maintainer" aria-selected="false">
+            Source changes
+          </button>
+        </div>
+        <div class="scenario">
+          <div>
+            <h3 id="scenario-title"></h3>
+            <p id="scenario-copy"></p>
+          </div>
+          <button id="scenario-action"></button>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const models = {
+        pointers: {
+          name: "Metadata only",
+          ownership: "Nothing copied",
+          tree: `agent-toolkit/
+├── plugins/
+│   ├── mattpocock-skills/
+│   │   └── entry.json
+│   ├── humanizer/
+│   │   └── entry.json
+│   └── superpowers/
+│       └── entry.json
+└── frontend/
+    └── impeccable/
+        └── entry.json`,
+          scores: { clarity: 8, visibility: 2, maintenance: 10, provenance: 10 },
+          verdict:
+            "One rule everywhere: folders describe external tools. The repository stays easy to maintain, but it cannot satisfy “show me every skill file.”",
+          changes: {
+            inspect: "You leave Agent Toolkit and open the pinned source link.",
+            "add-owned":
+              "The model breaks unless owned source gets a different folder rule.",
+            "source-update":
+              "A bot changes one SHA in entry.json. No source files change here.",
+          },
+        },
+        mirrors: {
+          name: "Complete mirrored plugins",
+          ownership: "Licensed snapshots",
+          tree: `agent-toolkit/
+└── plugins/
+    ├── core/
+    │   └── mattpocock-skills/
+    │       ├── entry.json
+    │       ├── LICENSE
+    │       ├── plugin.json
+    │       └── skills/
+    │           ├── tdd/SKILL.md
+    │           └── code-review/SKILL.md
+    └── engineering/
+        └── superpowers/
+            ├── entry.json
+            ├── LICENSE
+            ├── plugin.json
+            └── skills/…`,
+          scores: { clarity: 9, visibility: 10, maintenance: 4, provenance: 7 },
+          verdict:
+            "One strong rule: every plugin folder is complete and installable. It is easiest to browse, but Agent Toolkit republishes third-party files and accepts more update risk.",
+          changes: {
+            inspect: "The exact SKILL.md opens inside Agent Toolkit.",
+            "add-owned":
+              "Your plugin uses the same folder shape as every mirrored plugin.",
+            "source-update":
+              "A bot replaces changed files, preserves attribution, validates, and merges a larger PR.",
+          },
+        },
+        hybrid: {
+          name: "Owned source + external metadata",
+          ownership: "Ownership decides shape",
+          tree: `agent-toolkit/
+├── plugins/
+│   ├── owned/
+│   │   └── core/
+│   │       ├── entry.json
+│   │       ├── plugin.json
+│   │       └── skills/…
+│   └── external/
+│       ├── mattpocock-skills/entry.json
+│       └── superpowers/entry.json
+└── frontend/
+    └── impeccable/entry.json`,
+          scores: { clarity: 7, visibility: 6, maintenance: 9, provenance: 10 },
+          verdict:
+            "The ownership seam is explicit and safe. Your files are visible, but readers must learn why two plugin folders have different contents.",
+          changes: {
+            inspect:
+              "Your skills open locally; external skills open at their pinned source.",
+            "add-owned":
+              "A complete plugin folder appears under plugins/owned.",
+            "source-update":
+              "A bot changes only external pins. Your source changes through normal pull requests.",
+          },
+        },
+      };
+
+      const scenarios = {
+        reader: {
+          title: "Can I understand this repository in 30 seconds?",
+          copy:
+            "Select a model, then inspect a skill. Watch whether browsing stays inside the repository and whether ownership remains obvious.",
+          action: "Inspect a skill",
+          event: "inspect",
+        },
+        agent: {
+          title: "Can an agent infer one installation rule?",
+          copy:
+            "Add an owned skill. A consistent model should preserve one folder contract instead of forcing the agent to guess which files are real.",
+          action: "Add your own skill",
+          event: "add-owned",
+        },
+        maintainer: {
+          title: "What happens when another author ships a change?",
+          copy:
+            "Receive a source update. Compare a one-line pin change with a full mirrored-source replacement and its licensing responsibility.",
+          action: "Receive a source update",
+          event: "source-update",
+        },
+      };
+
+      const initialState = { model: "mirrors", scenario: "reader", change: "" };
+
+      function reduce(state, action) {
+        if (action.type === "select-model") {
+          return { ...state, model: action.model, change: "" };
+        }
+        if (action.type === "select-scenario") {
+          return { ...state, scenario: action.scenario, change: "" };
+        }
+        if (action.type === "simulate") {
+          return {
+            ...state,
+            change: models[state.model].changes[action.event],
+          };
+        }
+        return state;
+      }
+
+      let state = initialState;
+
+      function render() {
+        const model = models[state.model];
+        const scenario = scenarios[state.scenario];
+
+        document.querySelectorAll(".model").forEach((button) => {
+          button.setAttribute(
+            "aria-pressed",
+            String(button.dataset.model === state.model),
+          );
+        });
+        document.querySelectorAll('[role="tab"]').forEach((button) => {
+          button.setAttribute(
+            "aria-selected",
+            String(button.dataset.scenario === state.scenario),
+          );
+        });
+
+        document.querySelector("#model-name").textContent = model.name;
+        document.querySelector("#ownership").textContent = model.ownership;
+        document.querySelector("#tree").textContent = model.tree;
+        document.querySelector("#change").textContent = state.change;
+        document.querySelector("#verdict").textContent = model.verdict;
+        document.querySelector("#scenario-title").textContent = scenario.title;
+        document.querySelector("#scenario-copy").textContent = scenario.copy;
+        document.querySelector("#scenario-action").textContent = scenario.action;
+
+        document.querySelector("#metrics").innerHTML = Object.entries(
+          model.scores,
+        )
+          .map(
+            ([name, score]) => `
+              <div class="metric">
+                <span>${name[0].toUpperCase() + name.slice(1)}</span>
+                <strong>${score}/10</strong>
+                <div class="bar"><i style="width:${score * 10}%"></i></div>
+              </div>`,
+          )
+          .join("");
+      }
+
+      function dispatch(action) {
+        state = reduce(state, action);
+        render();
+      }
+
+      document.querySelectorAll(".model").forEach((button) => {
+        button.addEventListener("click", () =>
+          dispatch({ type: "select-model", model: button.dataset.model }),
+        );
+      });
+
+      document.querySelectorAll(".actions button").forEach((button) => {
+        button.addEventListener("click", () =>
+          dispatch({ type: "simulate", event: button.dataset.action }),
+        );
+      });
+
+      document.querySelectorAll('[role="tab"]').forEach((button) => {
+        button.addEventListener("click", () =>
+          dispatch({
+            type: "select-scenario",
+            scenario: button.dataset.scenario,
+          }),
+        );
+      });
+
+      document.querySelector("#scenario-action").addEventListener("click", () => {
+        dispatch({
+          type: "simulate",
+          event: scenarios[state.scenario].event,
+        });
+      });
+
+      render();
+    </script>
+  </body>
+</html>
