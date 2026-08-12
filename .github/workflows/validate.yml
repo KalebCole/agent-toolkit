@@ -1,6 +1,7 @@
 name: Validate marketplace
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -22,7 +23,5 @@ jobs:
       - name: Install Copilot CLI
         run: npm install --global @github/copilot
 
-      - name: Validate catalog and pinned installs
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
+      - name: Validate mirrored plugins
         run: bash scripts/validate-marketplace.sh

@@ -1,0 +1,14 @@
+{
+  "name": "oil-motion",
+  "version": "0.1.0",
+  "description": "Oil Motion animation guidance packaged for agent runtimes.",
+  "author": {
+    "name": "Zhihuang Lin",
+    "url": "https://github.com/oil-oil"
+  },
+  "repository": "https://github.com/oil-oil/oil-motion",
+  "license": "MIT",
+  "skills": [
+    "./skills/oil-motion"
+  ]
+}

@@ -1,0 +1,72 @@
+name: Update plugin mirrors
+
+on:
+  schedule:
+    - cron: "17 9 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: plugin-mirror-updates
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+
+      - name: Update mirrored plugin files
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: node scripts/mirrors.mjs sync
+
+      - name: Detect changes
+        id: changes
+        run: |
+          if git diff --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install Copilot CLI
+        if: steps.changes.outputs.changed == 'true'
+        run: npm install --global @github/copilot
+
+      - name: Validate updated plugins
+        if: steps.changes.outputs.changed == 'true'
+        run: bash scripts/validate-marketplace.sh
+
+      - name: Open update pull request
+        if: steps.changes.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          base="$GITHUB_REF_NAME"
+          branch="automation/plugin-mirrors-${base//\//-}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$branch"
+          git add .github/plugin/mirrors.json plugins
+          git commit -m "Update mirrored plugin sources"
+          git push --force origin "HEAD:$branch"
+
+          pr_url="$(gh pr list --base "$base" --head "$branch" --json url --jq '.[0].url')"
+          if [[ -z "$pr_url" ]]; then
+            gh pr create \
+              --base "$base" \
+              --head "$branch" \
+              --title "Update mirrored plugin sources" \
+              --body "Automated mirror update. Packaging and clean Copilot installs passed. Review changed agent instructions before merging."
+          fi

@@ -1,0 +1,14 @@
+{
+  "name": "impeccable",
+  "version": "4.0.4",
+  "description": "Frontend design fluency packaged for GitHub Copilot.",
+  "author": {
+    "name": "Paul Bakaus",
+    "url": "https://github.com/pbakaus"
+  },
+  "repository": "https://github.com/pbakaus/impeccable",
+  "license": "Apache-2.0",
+  "skills": [
+    "./.claude/skills/impeccable"
+  ]
+}

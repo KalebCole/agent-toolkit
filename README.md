@@ -1,31 +1,26 @@
 # Agent Toolkit
 
-My folder-first collection of agent tools, with a GitHub Copilot CLI
-marketplace for installable plugins.
+My installable runtime packages for the tools and workflows I use.
 
-Each tool has its own folder and machine-readable `entry.json`. External source
-stays in the repository that owns it.
+Every folder under [`plugins/`](plugins/) is a complete standard plugin. Open a
+folder to inspect its real skill files, agents, hooks, and manifest.
 
-## Browse
+## Plugins
 
-### Plugins
+| Plugin | Uses |
+|---|---|
+| [`mattpocock-skills`](plugins/mattpocock-skills/) | Core, engineering |
+| [`humanizer`](plugins/humanizer/) | Core, writing |
+| [`cli-printing-press`](plugins/cli-printing-press/) | Engineering, CLI creation |
+| [`superpowers`](plugins/superpowers/) | Engineering, optional guided workflow |
+| [`impeccable`](plugins/impeccable/) | Engineering, frontend design |
+| [`grill-design`](plugins/grill-design/) | Engineering, frontend design |
+| [`oil-motion`](plugins/oil-motion/) | Engineering, frontend animation |
+| [`todoist-cli`](plugins/todoist-cli/) | Core, engineering, personal assistant |
+| [`obsidian-cli`](plugins/obsidian-cli/) | Personal assistant, knowledge |
 
-- [`mattpocock-skills`](plugins/mattpocock-skills/) — my primary engineering
-  workflow
-- [`humanizer`](plugins/humanizer/) — make AI-assisted writing sound natural
-- [`cli-printing-press`](plugins/cli-printing-press/) — build agent-friendly Go
-  CLIs
-- [`superpowers`](plugins/superpowers/) — optional, more prescriptive
-  engineering workflows
-
-### Frontend
-
-- [`impeccable`](frontend/impeccable/) — frontend design toolkit
-- [`grill-design`](frontend/grill-design/) — design grilling skill
-- [`oil-motion`](frontend/oil-motion/) — responsive web animation library
-
-Each external entry is pinned to an exact source commit. The source authors own
-their code, releases, licenses, and future changes.
+Uses overlap by design. Standard marketplace `tags` describe those contexts;
+folders stay flat by plugin name.
 
 ## Install
 
@@ -43,6 +38,11 @@ copilot plugin install mattpocock-skills@agent-toolkit
 copilot plugin install humanizer@agent-toolkit
 copilot plugin install cli-printing-press@agent-toolkit
 copilot plugin install superpowers@agent-toolkit
+copilot plugin install impeccable@agent-toolkit
+copilot plugin install grill-design@agent-toolkit
+copilot plugin install oil-motion@agent-toolkit
+copilot plugin install todoist-cli@agent-toolkit
+copilot plugin install obsidian-cli@agent-toolkit
 ```
 
 ### CLI Printing Press prerequisite
@@ -88,23 +88,26 @@ the following entry to your personal `~/.copilot/settings.json`:
 
 This is a personal opt-in. Agent Toolkit cannot enable it for you.
 
-## Automatic source updates
+## Mirrored source
 
-A daily GitHub Actions workflow checks every entry's tracked branch. When a
-source commit changes, the workflow:
+The external authors remain the source owners. Agent Toolkit mirrors only the
+files that form each plugin package and preserves the source license in that
+plugin folder.
 
-1. updates the commit pin in the entry and generated marketplace;
-2. installs every pinned plugin in a clean Copilot configuration;
-3. opens a pull request; and
-4. merges the pull request after validation succeeds.
+A daily GitHub Actions workflow checks each source repository. When source
+changes, it:
 
-Only pins and descriptive metadata live here. External source is not copied
-into Agent Toolkit. These updates are automated and are not human-reviewed.
+1. refreshes the mirrored plugin files;
+2. verifies the files match the recorded source commit;
+3. installs every plugin in a clean Copilot configuration; and
+4. opens a pull request for human review.
+
+Source-changing pull requests are never merged automatically.
 
 Run the same checks locally:
 
 ```bash
-node scripts/catalog.mjs check
+node scripts/mirrors.mjs check
 bash scripts/validate-marketplace.sh
 ```
 
@@ -113,6 +116,5 @@ bash scripts/validate-marketplace.sh
 Marketplace v0 is verified with GitHub Copilot CLI. GitHub Copilot Desktop
 support is not claimed until its plugin behavior is tested.
 
-A later release will add my public-safe skills, agents, and hooks as real
-folders. This release contains no empty plugin or synthetic placeholder
-content.
+GitHub Copilot CLI is the first verified runtime. Other runtime adapters remain
+future work.

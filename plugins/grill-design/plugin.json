@@ -1,0 +1,14 @@
+{
+  "name": "grill-design",
+  "version": "0.1.0",
+  "description": "Design grilling workflow packaged for agent runtimes.",
+  "author": {
+    "name": "Will Ness",
+    "url": "https://github.com/will-ness-ai"
+  },
+  "repository": "https://github.com/will-ness-ai/skills",
+  "license": "MIT",
+  "skills": [
+    "./skills/grill-design"
+  ]
+}

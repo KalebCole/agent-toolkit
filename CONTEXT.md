@@ -1,7 +1,7 @@
 # Agent Toolkit
 
-Agent Toolkit is a folder-first collection of agent tools and a curated
-distribution point for credited external plugins.
+Agent Toolkit is a collection of complete installable runtime packages for the
+tools and workflows Kaleb uses.
 
 ## Language
 
@@ -12,8 +12,8 @@ Marketplace v0.
 _Avoid_: Catalog plugin, universal manifest
 
 **Curated Marketplace**:
-The Agent Toolkit Copilot marketplace containing selected external plugins.
-Registration installs nothing; users choose each plugin.
+The Agent Toolkit Copilot marketplace containing complete local Plugin
+folders. Registration installs nothing; users choose each Plugin.
 _Avoid_: Bundle, plugin pack
 
 **Marketplace v0**:
@@ -22,21 +22,32 @@ External Plugins and does not contain an empty or synthetic Core Plugin.
 _Avoid_: Core Plugin v0, source bundle
 
 **External Plugin**:
-A plugin listed by the Curated Marketplace but authored, sourced, and updated
-from its Source Repository. Agent Toolkit pins each plugin to an exact commit.
-_Avoid_: Agent Toolkit plugin, included source
+A Mirrored Plugin whose source is authored and maintained in another
+repository.
+_Avoid_: Agent Toolkit-owned plugin
 
-**Catalog Entry**:
-One tool folder containing an `entry.json` file. It records identity,
-classification, authorship, Source Repository, and pinned source commit.
-_Avoid_: Pointer card, Markdown entry
+**Plugin**:
+One complete folder under `plugins/` containing a standard plugin manifest and
+the real skills, agents, hooks, or runtime configuration it distributes.
+_Avoid_: Catalog entry, pointer card
 
 **Source Repository**:
-The external GitHub repository that owns and maintains a Catalog Entry's
-source. Agent Toolkit stores a pin and metadata, not a source copy.
-_Avoid_: Upstream, vendored repository
+The external GitHub repository that owns and maintains a Mirrored Plugin's
+source.
+_Avoid_: Agent Toolkit repository
 
-**Pin Update**:
-An automated pull request that moves a Catalog Entry from one exact source
-commit to another after clean installation checks pass.
-_Avoid_: Source import, vendoring
+**Mirrored Plugin**:
+A complete Plugin whose licensed package files are copied from a recorded
+Source Repository commit. Its source license and authorship remain intact.
+_Avoid_: Fork, Agent Toolkit-owned plugin
+
+**Adapter Plugin**:
+A Plugin package created here around an external CLI, library, MCP server, or
+standalone skill that did not already ship as a complete plugin.
+_Avoid_: Source fork, copied application
+
+**Mirror Update**:
+An automated pull request that refreshes Mirrored Plugin files from recorded
+Source Repository commits. A human reviews changed agent instructions before
+merge.
+_Avoid_: Automatic merge

@@ -1,0 +1,14 @@
+{
+  "name": "todoist-cli",
+  "version": "0.1.0",
+  "description": "Todoist CLI guidance packaged for agent runtimes.",
+  "author": {
+    "name": "Doist",
+    "url": "https://github.com/Doist"
+  },
+  "repository": "https://github.com/Doist/todoist-cli",
+  "license": "MIT",
+  "skills": [
+    "./skills/todoist-cli"
+  ]
+}

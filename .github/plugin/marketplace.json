@@ -4,69 +4,117 @@
     "name": "Kaleb Cole"
   },
   "metadata": {
-    "description": "Kaleb's curated GitHub Copilot CLI plugins.",
-    "version": "0.2.0"
+    "description": "Kaleb's installable agent runtime packages.",
+    "version": "0.3.0-prototype"
   },
   "plugins": [
     {
       "name": "mattpocock-skills",
-      "description": "External · Pinned source. Engineering workflows maintained by Matt Pocock.",
-      "source": {
-        "source": "github",
-        "repo": "mattpocock/skills",
-        "sha": "84fdeffd12f2ee307994d1eb6feb48173b6e0502"
-      },
+      "description": "Matt Pocock's engineering workflows.",
+      "source": "plugins/mattpocock-skills",
       "author": {
         "name": "Matt Pocock",
         "url": "https://github.com/mattpocock"
       },
       "repository": "https://github.com/mattpocock/skills",
-      "category": "engineering"
+      "category": "engineering",
+      "tags": ["core", "engineering"]
     },
     {
       "name": "humanizer",
-      "description": "External · Pinned source. Natural writing workflow maintained by blader.",
-      "source": {
-        "source": "github",
-        "repo": "blader/humanizer",
-        "sha": "523374dee72d67c7b2b5f858ea0094ffda49c3ac"
-      },
+      "description": "Natural writing workflow maintained by blader.",
+      "source": "plugins/humanizer",
       "author": {
         "name": "blader",
         "url": "https://github.com/blader"
       },
       "repository": "https://github.com/blader/humanizer",
-      "category": "writing"
+      "category": "writing",
+      "tags": ["core", "writing"]
     },
     {
       "name": "cli-printing-press",
-      "description": "External · Pinned source. Agent-friendly CLI generator maintained by mvanhorn. Requires its Go binary.",
-      "source": {
-        "source": "github",
-        "repo": "mvanhorn/cli-printing-press",
-        "sha": "128f67631ef5116dbe382ce2cfc758084675b779"
-      },
+      "description": "Agent-friendly CLI generator maintained by mvanhorn. Requires its Go binary.",
+      "source": "plugins/cli-printing-press",
       "author": {
         "name": "mvanhorn",
         "url": "https://github.com/mvanhorn"
       },
       "repository": "https://github.com/mvanhorn/cli-printing-press",
-      "category": "cli"
+      "category": "engineering",
+      "tags": ["engineering", "cli"]
     },
     {
       "name": "superpowers",
-      "description": "External · Pinned source. Optional prescriptive engineering workflows maintained by Jesse Vincent.",
-      "source": {
-        "source": "github",
-        "repo": "obra/superpowers",
-        "sha": "44c9b2d6e889982ac18c27d05a19fefe335194e1"
-      },
+      "description": "Optional prescriptive engineering workflows maintained by Jesse Vincent.",
+      "source": "plugins/superpowers",
       "author": {
         "name": "Jesse Vincent",
         "url": "https://github.com/obra"
       },
       "repository": "https://github.com/obra/superpowers",
-      "category": "engineering"
+      "category": "engineering",
+      "tags": ["engineering"]
+    },
+    {
+      "name": "impeccable",
+      "description": "Frontend design fluency maintained by Paul Bakaus.",
+      "source": "plugins/impeccable",
+      "author": {
+        "name": "Paul Bakaus",
+        "url": "https://github.com/pbakaus"
+      },
+      "repository": "https://github.com/pbakaus/impeccable",
+      "category": "frontend-design",
+      "tags": ["engineering", "frontend-design"]
+    },
+    {
+      "name": "grill-design",
+      "description": "Design grilling workflow maintained by Will Ness.",
+      "source": "plugins/grill-design",
+      "author": {
+        "name": "Will Ness",
+        "url": "https://github.com/will-ness-ai"
+      },
+      "repository": "https://github.com/will-ness-ai/skills",
+      "category": "frontend-design",
+      "tags": ["engineering", "frontend-design"]
+    },
+    {
+      "name": "oil-motion",
+      "description": "Interactive web animation guidance maintained by Zhihuang Lin.",
+      "source": "plugins/oil-motion",
+      "author": {
+        "name": "Zhihuang Lin",
+        "url": "https://github.com/oil-oil"
+      },
+      "repository": "https://github.com/oil-oil/oil-motion",
+      "category": "frontend-design",
+      "tags": ["engineering", "frontend-design", "animation"]
+    },
+    {
+      "name": "todoist-cli",
+      "description": "Todoist CLI guidance maintained by Doist.",
+      "source": "plugins/todoist-cli",
+      "author": {
+        "name": "Doist",
+        "url": "https://github.com/Doist"
+      },
+      "repository": "https://github.com/Doist/todoist-cli",
+      "category": "productivity",
+      "tags": ["core", "engineering", "personal-assistant", "cli"]
+    },
+    {
+      "name": "obsidian-cli",
+      "description": "Obsidian CLI guidance maintained by Steph Ango.",
+      "source": "plugins/obsidian-cli",
+      "author": {
+        "name": "Steph Ango",
+        "url": "https://github.com/kepano"
+      },
+      "repository": "https://github.com/kepano/obsidian-skills",
+      "category": "productivity",
+      "tags": ["personal-assistant", "knowledge", "cli"]
     }
   ]
 }

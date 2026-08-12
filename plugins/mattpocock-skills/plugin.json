@@ -1,0 +1,15 @@
+{
+  "name": "mattpocock-skills",
+  "version": "1.2.3",
+  "description": "Matt Pocock's engineering workflows packaged for GitHub Copilot.",
+  "author": {
+    "name": "Matt Pocock",
+    "url": "https://www.aihero.dev"
+  },
+  "repository": "https://github.com/mattpocock/skills",
+  "license": "MIT",
+  "skills": [
+    "./skills/engineering",
+    "./skills/productivity"
+  ]
+}

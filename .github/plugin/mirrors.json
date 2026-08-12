@@ -1,0 +1,213 @@
+{
+  "mirrors": [
+    {
+      "name": "mattpocock-skills",
+      "repo": "mattpocock/skills",
+      "branch": "main",
+      "sha": "84fdeffd12f2ee307994d1eb6feb48173b6e0502",
+      "expectedSkills": 25,
+      "owned": [
+        "plugin.json"
+      ],
+      "versionFrom": ".claude-plugin/plugin.json",
+      "copies": [
+        {
+          "from": ".claude-plugin",
+          "to": ".claude-plugin"
+        },
+        {
+          "from": "skills/engineering",
+          "to": "skills/engineering"
+        },
+        {
+          "from": "skills/productivity",
+          "to": "skills/productivity"
+        },
+        {
+          "from": "LICENSE",
+          "to": "LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "humanizer",
+      "repo": "blader/humanizer",
+      "branch": "main",
+      "sha": "523374dee72d67c7b2b5f858ea0094ffda49c3ac",
+      "expectedSkills": 1,
+      "copies": [
+        {
+          "from": ".claude-plugin",
+          "to": ".claude-plugin"
+        },
+        {
+          "from": "SKILL.md",
+          "to": "SKILL.md"
+        },
+        {
+          "from": "agents",
+          "to": "agents"
+        },
+        {
+          "from": "LICENSE",
+          "to": "LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "cli-printing-press",
+      "repo": "mvanhorn/cli-printing-press",
+      "branch": "main",
+      "sha": "128f67631ef5116dbe382ce2cfc758084675b779",
+      "expectedSkills": 9,
+      "copies": [
+        {
+          "from": ".claude-plugin",
+          "to": ".claude-plugin"
+        },
+        {
+          "from": "skills",
+          "to": "skills"
+        },
+        {
+          "from": "LICENSE",
+          "to": "LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "superpowers",
+      "repo": "obra/superpowers",
+      "branch": "main",
+      "sha": "44c9b2d6e889982ac18c27d05a19fefe335194e1",
+      "expectedSkills": 14,
+      "copies": [
+        {
+          "from": ".claude-plugin",
+          "to": ".claude-plugin"
+        },
+        {
+          "from": "skills",
+          "to": "skills"
+        },
+        {
+          "from": "hooks",
+          "to": "hooks"
+        },
+        {
+          "from": "LICENSE",
+          "to": "LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "impeccable",
+      "repo": "pbakaus/impeccable",
+      "branch": "main",
+      "sha": "ae388ac58fb33aade50fc47e2be07c3192dcaabd",
+      "expectedSkills": 1,
+      "owned": [
+        "plugin.json"
+      ],
+      "versionFrom": ".claude-plugin/plugin.json",
+      "copies": [
+        {
+          "from": ".claude-plugin",
+          "to": ".claude-plugin"
+        },
+        {
+          "from": ".claude/skills",
+          "to": ".claude/skills"
+        },
+        {
+          "from": "LICENSE",
+          "to": "LICENSE"
+        },
+        {
+          "from": "NOTICE.md",
+          "to": "NOTICE.md"
+        }
+      ]
+    },
+    {
+      "name": "grill-design",
+      "repo": "will-ness-ai/skills",
+      "branch": "main",
+      "sha": "446635a42d3624fa4b36dfb03f589803999082e1",
+      "expectedSkills": 1,
+      "owned": [
+        "plugin.json"
+      ],
+      "copies": [
+        {
+          "from": "skills/grill-design",
+          "to": "skills/grill-design"
+        },
+        {
+          "from": "LICENSE",
+          "to": "LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "oil-motion",
+      "repo": "oil-oil/oil-motion",
+      "branch": "main",
+      "sha": "3e145be06f0690ff6cd7c0adb224d0c9f324abba",
+      "expectedSkills": 1,
+      "owned": [
+        "plugin.json"
+      ],
+      "copies": [
+        {
+          "from": "SKILL.md",
+          "to": "skills/oil-motion/SKILL.md"
+        },
+        {
+          "from": "LICENSE",
+          "to": "LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "todoist-cli",
+      "repo": "Doist/todoist-cli",
+      "branch": "main",
+      "sha": "a3078edd9ad2e91d8ddf06bf45f60dbf5510accf",
+      "expectedSkills": 1,
+      "owned": [
+        "plugin.json"
+      ],
+      "copies": [
+        {
+          "from": "skills/todoist-cli",
+          "to": "skills/todoist-cli"
+        },
+        {
+          "from": "LICENSE",
+          "to": "LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "obsidian-cli",
+      "repo": "kepano/obsidian-skills",
+      "branch": "main",
+      "sha": "a1dc48e68138490d522c04cbf5822214c6eb1202",
+      "expectedSkills": 1,
+      "owned": [
+        "plugin.json"
+      ],
+      "copies": [
+        {
+          "from": "skills/obsidian-cli",
+          "to": "skills/obsidian-cli"
+        },
+        {
+          "from": "LICENSE",
+          "to": "LICENSE"
+        }
+      ]
+    }
+  ]
+}

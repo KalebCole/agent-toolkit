@@ -1,0 +1,14 @@
+{
+  "name": "obsidian-cli",
+  "version": "0.1.0",
+  "description": "Obsidian CLI guidance packaged for agent runtimes.",
+  "author": {
+    "name": "Steph Ango",
+    "url": "https://github.com/kepano"
+  },
+  "repository": "https://github.com/kepano/obsidian-skills",
+  "license": "MIT",
+  "skills": [
+    "./skills/obsidian-cli"
+  ]
+}
