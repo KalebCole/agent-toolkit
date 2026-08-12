@@ -5,27 +5,24 @@ root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 test_home="$(mktemp -d)"
 trap 'rm -rf "$test_home"' EXIT
 
-node "$root/scripts/catalog.mjs" check
-node "$root/scripts/catalog.mjs" verify-sources
+jq --exit-status '
+  .plugins | length == 1 and
+  .[0].name == "kaleb-toolkit" and
+  .[0].source == "plugins/kaleb-toolkit"
+' "$root/.github/plugin/marketplace.json" > /dev/null
+
+jq --exit-status '
+  .name == "kaleb-toolkit" and
+  .skills == ["./skills/toolkit-router"]
+' "$root/plugins/kaleb-toolkit/plugin.json" > /dev/null
+
+test -f "$root/plugins/kaleb-toolkit/skills/toolkit-router/SKILL.md"
 
 export COPILOT_HOME="$test_home"
 copilot plugin marketplace add "$root"
+copilot plugin install kaleb-toolkit@agent-toolkit
 
-while IFS=$'\t' read -r plugin repo sha path; do
-  copilot plugin install "$plugin@agent-toolkit"
-
-  source_tree="$(mktemp -d)"
-  curl --fail --silent --show-error --location \
-    "https://api.github.com/repos/$repo/tarball/$sha" \
-    | tar --extract --gzip --strip-components=1 --directory "$source_tree"
-
-  expected="$source_tree"
-  if [[ -n "$path" ]]; then
-    expected="$source_tree/$path"
-  fi
-  installed="$COPILOT_HOME/installed-plugins/agent-toolkit/$plugin"
-  diff --recursive --brief "$expected" "$installed"
-  rm -rf "$source_tree"
-done < <(node "$root/scripts/catalog.mjs" plugin-sources)
+installed="$COPILOT_HOME/installed-plugins/agent-toolkit/kaleb-toolkit"
+test "$(find "$installed" -name SKILL.md -type f | wc -l)" -eq 1
 
 copilot plugin list

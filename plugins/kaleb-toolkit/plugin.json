@@ -1,0 +1,14 @@
+{
+  "name": "kaleb-toolkit",
+  "version": "0.1.0",
+  "description": "Kaleb's owned agent workflows.",
+  "author": {
+    "name": "Kaleb Cole",
+    "url": "https://github.com/KalebCole"
+  },
+  "repository": "https://github.com/KalebCole/agent-toolkit",
+  "license": "MIT",
+  "skills": [
+    "./skills/toolkit-router"
+  ]
+}
