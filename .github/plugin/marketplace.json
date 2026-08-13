@@ -14,7 +14,7 @@
       "source": {
         "source": "github",
         "repo": "mattpocock/skills",
-        "sha": "84fdeffd12f2ee307994d1eb6feb48173b6e0502"
+        "sha": "8b78b531ab965735c5dc74f6f7a219e1e37326df"
       },
       "author": {
         "name": "Matt Pocock",
@@ -44,7 +44,7 @@
       "source": {
         "source": "github",
         "repo": "mvanhorn/cli-printing-press",
-        "sha": "128f67631ef5116dbe382ce2cfc758084675b779"
+        "sha": "eae5b3d70bf83038440e07e06b10f7a3d9c34fd9"
       },
       "author": {
         "name": "mvanhorn",
@@ -59,7 +59,7 @@
       "source": {
         "source": "github",
         "repo": "obra/superpowers",
-        "sha": "44c9b2d6e889982ac18c27d05a19fefe335194e1"
+        "sha": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797"
       },
       "author": {
         "name": "Jesse Vincent",
