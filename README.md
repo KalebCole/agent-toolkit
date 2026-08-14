@@ -1,52 +1,36 @@
 # Agent Toolkit
 
-> [!WARNING]
-> This branch is a throwaway v0 prototype. It tests one question: does one
-> owned plugin plus a link-only external showcase feel like the right model?
+Agent Toolkit is the public catalog of the tools I use with two agent setups:
 
-Agent Toolkit is where I publish the agent workflows I own and document the
-external tools I use.
+- **GitHub Copilot — Engineer:** software engineering, research, documentation,
+  and browser-assisted development.
+- **Hermes — Personal Assistant:** tasks, communication, research, notes, and
+  local computer workflows.
 
-## My toolkit
+## Catalog
 
-[`kaleb-toolkit`](plugins/kaleb-toolkit/) is the only plugin distributed by
-this repository. Its source is visible here and maintained here.
+[`catalog.json`](catalog.json) is the canonical, machine-readable inventory. It
+contains one entry per project and identifies whether Copilot, Hermes, or both
+use it.
 
-The v0 prototype contains one original skill:
+Each entry records:
 
-- [`toolkit-router`](plugins/kaleb-toolkit/skills/toolkit-router/) helps choose
-  the smallest useful workflow for engineering, design, writing, or personal
-  organization.
+- what the tool does;
+- whether it is a CLI, skill, plugin, collection, or toolkit;
+- which setup uses it;
+- its canonical source and license.
 
-### Install
+## External-source policy
 
-```bash
-copilot plugin marketplace add KalebCole/agent-toolkit
-copilot plugin install kaleb-toolkit@agent-toolkit
-```
+The v0 catalog links to external projects. It does not copy, repackage, pin, or
+install their source. Each upstream maintainer controls releases, installation,
+licensing, and updates.
 
-## External tools I use
+The catalog includes proprietary tools when they are part of an actual setup.
+Their entries link to the applicable first-party terms instead of presenting
+them as open source.
 
-These projects remain independent. Agent Toolkit does not copy, pin, repackage,
-or update their source.
+## Scope
 
-| Tool | What I use it for | Source |
-|---|---|---|
-| Matt Pocock Skills | Primary engineering workflow | [`mattpocock/skills`](https://github.com/mattpocock/skills) |
-| Humanizer | Natural writing | [`blader/humanizer`](https://github.com/blader/humanizer) |
-| CLI Printing Press | Building agent-friendly Go CLIs | [`mvanhorn/cli-printing-press`](https://github.com/mvanhorn/cli-printing-press) |
-| Superpowers | Optional, more prescriptive engineering workflow | [`obra/superpowers`](https://github.com/obra/superpowers) |
-| Impeccable | Frontend design work | [`pbakaus/impeccable`](https://github.com/pbakaus/impeccable) |
-| Grill Design | Iterative design grilling | [`will-ness-ai/skills`](https://github.com/will-ness-ai/skills/tree/main/skills/grill-design) |
-| Oil Motion | Responsive web animation | [`oil-oil/oil-motion`](https://github.com/oil-oil/oil-motion) |
-| Todoist CLI | Tasks and personal-assistant workflows | [`Doist/todoist-cli`](https://github.com/Doist/todoist-cli) |
-| Obsidian Skills | Notes and knowledge workflows | [`kepano/obsidian-skills`](https://github.com/kepano/obsidian-skills) |
-
-Install external tools from their own documentation. Their maintainers control
-their source, releases, licenses, and update behavior.
-
-## Ownership rule
-
-A skill ships in `kaleb-toolkit` only when its instructions are authored and
-maintained here. An owned skill can depend on an external CLI or library, but
-the dependency stays external and receives a direct source link.
+This first version is an inventory. It does not include an installer, a landing
+page, or a repository-owned plugin.

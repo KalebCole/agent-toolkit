@@ -1,0 +1,365 @@
+{
+  "schemaVersion": 1,
+  "setups": {
+    "copilot": {
+      "name": "GitHub Copilot",
+      "role": "Engineer"
+    },
+    "hermes": {
+      "name": "Hermes",
+      "role": "Personal Assistant"
+    }
+  },
+  "items": [
+    {
+      "id": "azure-cli",
+      "name": "Azure CLI",
+      "summary": "Manage Azure resources and services from the command line.",
+      "kind": "cli",
+      "roles": ["copilot"],
+      "source": "https://github.com/Azure/azure-cli",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/Azure/azure-cli/blob/dev/LICENSE"
+      }
+    },
+    {
+      "id": "context7-cli",
+      "name": "Context7 CLI",
+      "summary": "Retrieve current library documentation for coding workflows.",
+      "kind": "cli",
+      "roles": ["copilot"],
+      "source": "https://github.com/upstash/context7/tree/master/packages/cli",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/upstash/context7/blob/master/packages/cli/package.json"
+      }
+    },
+    {
+      "id": "microsoft-learn-cli",
+      "name": "Microsoft Learn CLI",
+      "summary": "Search Microsoft Learn documentation from coding workflows.",
+      "kind": "cli",
+      "roles": ["copilot"],
+      "source": "https://github.com/MicrosoftDocs/mcp/tree/main/cli",
+      "license": {
+        "name": "MIT package metadata; CC-BY-4.0 repository",
+        "source": "https://github.com/MicrosoftDocs/mcp/blob/main/cli/package.json",
+        "note": "The package and repository declare different licenses.",
+        "additionalSource": "https://github.com/MicrosoftDocs/mcp/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "agent-browser",
+      "name": "agent-browser",
+      "summary": "Automate browser interactions from agent workflows.",
+      "kind": "cli",
+      "roles": ["copilot", "hermes"],
+      "source": "https://github.com/vercel-labs/agent-browser",
+      "license": {
+        "name": "Apache-2.0",
+        "source": "https://github.com/vercel-labs/agent-browser/blob/main/package.json"
+      }
+    },
+    {
+      "id": "todoist-cli",
+      "name": "Todoist CLI",
+      "summary": "Manage Todoist tasks, projects, and related planning data.",
+      "kind": "cli",
+      "roles": ["copilot", "hermes"],
+      "source": "https://github.com/Doist/todoist-cli",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/Doist/todoist-cli/blob/main/package.json"
+      }
+    },
+    {
+      "id": "github-cli",
+      "name": "GitHub CLI",
+      "summary": "Work with GitHub repositories, issues, pull requests, and workflows.",
+      "kind": "cli",
+      "roles": ["copilot", "hermes"],
+      "source": "https://github.com/cli/cli",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/cli/cli/blob/trunk/LICENSE"
+      }
+    },
+    {
+      "id": "gog-cli",
+      "name": "Gog CLI",
+      "summary": "Access Google Workspace services from personal-assistant workflows.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/openclaw/gogcli",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/openclaw/gogcli/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "imsg",
+      "name": "imsg",
+      "summary": "Read, search, and send iMessage or SMS messages.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/openclaw/imsg",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/openclaw/imsg/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "cua-driver",
+      "name": "Cua Driver",
+      "summary": "Control desktop and browser applications through computer-use workflows.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/trycua/cua/tree/main/libs/cua-driver",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/trycua/cua/blob/main/LICENSE.md"
+      }
+    },
+    {
+      "id": "markitdown",
+      "name": "MarkItDown",
+      "summary": "Convert documents and other files to Markdown.",
+      "kind": "cli",
+      "roles": ["copilot"],
+      "source": "https://github.com/microsoft/markitdown",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/microsoft/markitdown/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "obsidian-cli",
+      "name": "Obsidian CLI",
+      "summary": "Automate Obsidian notes, properties, and vault operations.",
+      "kind": "cli",
+      "roles": ["copilot"],
+      "source": "https://help.obsidian.md/cli",
+      "license": {
+        "name": "Proprietary",
+        "source": "https://obsidian.md/terms"
+      }
+    },
+    {
+      "id": "cli-printing-press",
+      "name": "CLI Printing Press",
+      "summary": "Create agent-oriented command-line tools and MCP integrations.",
+      "kind": "toolkit",
+      "roles": ["copilot", "hermes"],
+      "source": "https://github.com/mvanhorn/cli-printing-press",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/mvanhorn/cli-printing-press/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "visual-explainer",
+      "name": "Visual Explainer",
+      "summary": "Create visual explanations of systems, plans, and technical concepts.",
+      "kind": "skill",
+      "roles": ["copilot"],
+      "source": "https://github.com/nicobailon/visual-explainer",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/nicobailon/visual-explainer/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "partiful-cli",
+      "name": "Partiful CLI",
+      "summary": "Manage Partiful events from agent workflows.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/KalebCole/partiful-cli",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/KalebCole/partiful-cli/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "himalaya",
+      "name": "Himalaya",
+      "summary": "Read and send email through a command-line interface.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/pimalaya/himalaya",
+      "license": {
+        "name": "MIT OR Apache-2.0",
+        "source": "https://github.com/pimalaya/himalaya/blob/master/Cargo.toml"
+      }
+    },
+    {
+      "id": "bitwarden-cli",
+      "name": "Bitwarden CLI",
+      "summary": "Access Bitwarden vault data from authenticated workflows.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/bitwarden/clients/tree/main/apps/cli",
+      "license": {
+        "name": "GPL-3.0 with Bitwarden exceptions",
+        "source": "https://github.com/bitwarden/clients/blob/main/LICENSE.txt"
+      }
+    },
+    {
+      "id": "bitwarden-secrets-manager-cli",
+      "name": "Bitwarden Secrets Manager CLI",
+      "summary": "Access machine-account secrets from automated workflows.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/bitwarden/sdk-sm/tree/main/crates/bws",
+      "license": {
+        "name": "Bitwarden SDK License Agreement",
+        "source": "https://github.com/bitwarden/sdk-sm/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "tailscale",
+      "name": "Tailscale",
+      "summary": "Connect private devices and services for remote agent access.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/tailscale/tailscale",
+      "license": {
+        "name": "BSD-3-Clause",
+        "source": "https://github.com/tailscale/tailscale/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "xurl",
+      "name": "xurl",
+      "summary": "Give agents a structured command-line interface for web requests.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/Xuanwo/xurl",
+      "license": {
+        "name": "Apache-2.0",
+        "source": "https://github.com/Xuanwo/xurl/blob/main/Cargo.toml"
+      }
+    },
+    {
+      "id": "blogwatcher",
+      "name": "BlogWatcher",
+      "summary": "Monitor blogs and feeds for new content.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/Hyaxia/blogwatcher",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/Hyaxia/blogwatcher/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "qmd",
+      "name": "QMD",
+      "summary": "Search local Markdown documents and knowledge bases.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/tobi/qmd",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/tobi/qmd/blob/main/package.json"
+      }
+    },
+    {
+      "id": "summarize",
+      "name": "summarize",
+      "summary": "Summarize URLs, files, videos, and podcasts.",
+      "kind": "cli",
+      "roles": ["hermes"],
+      "source": "https://github.com/steipete/summarize",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/steipete/summarize/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "papercuts",
+      "name": "papercuts",
+      "summary": "Capture recurring agent friction and improvement opportunities.",
+      "kind": "skill",
+      "roles": ["hermes"],
+      "source": "https://github.com/TheMikeFactoryMustGrow/papercuts",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/TheMikeFactoryMustGrow/papercuts/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "humanizer",
+      "name": "Humanizer",
+      "summary": "Remove common AI writing patterns from outbound communication.",
+      "kind": "skill",
+      "roles": ["copilot", "hermes"],
+      "source": "https://github.com/blader/humanizer",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/blader/humanizer/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "i-have-adhd",
+      "name": "i-have-adhd",
+      "summary": "Make agent output actionable and easier to follow with ADHD.",
+      "kind": "skill",
+      "roles": ["copilot", "hermes"],
+      "source": "https://github.com/ayghri/i-have-adhd",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/ayghri/i-have-adhd/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "impeccable",
+      "name": "Impeccable",
+      "summary": "Design, review, and improve frontend user interfaces.",
+      "kind": "skill",
+      "roles": ["copilot", "hermes"],
+      "source": "https://github.com/pbakaus/impeccable",
+      "license": {
+        "name": "Apache-2.0",
+        "source": "https://github.com/pbakaus/impeccable/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "matt-pocock-skills",
+      "name": "Matt Pocock Skills",
+      "summary": "Provide reusable engineering, planning, and reasoning workflows.",
+      "kind": "skill-collection",
+      "roles": ["copilot", "hermes"],
+      "source": "https://github.com/mattpocock/skills",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/mattpocock/skills/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "superpowers",
+      "name": "Superpowers",
+      "summary": "Provide structured software-development workflows as composable skills.",
+      "kind": "plugin",
+      "roles": ["copilot", "hermes"],
+      "source": "https://github.com/obra/superpowers",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/obra/superpowers/blob/main/LICENSE"
+      }
+    },
+    {
+      "id": "grill-design",
+      "name": "Grill Design",
+      "summary": "Stress-test designs through iterative, decision-focused questioning.",
+      "kind": "skill",
+      "roles": ["copilot"],
+      "source": "https://github.com/will-ness-ai/skills/tree/main/skills/grill-design",
+      "license": {
+        "name": "MIT",
+        "source": "https://github.com/will-ness-ai/skills/blob/main/LICENSE"
+      }
+    }
+  ]
+}

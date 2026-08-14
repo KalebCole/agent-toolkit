@@ -1,31 +1,26 @@
 # Agent Toolkit
 
-Agent Toolkit distributes one owned plugin and documents external tools without
-redistributing them.
+Agent Toolkit is the public, machine-readable catalog of the tools used by
+Kaleb's Copilot Engineer and Hermes Personal Assistant setups.
 
 ## Language
 
-**Owned Plugin**:
-The single `kaleb-toolkit` plugin distributed from this repository. It contains
-only workflows maintained here.
-_Avoid_: Core Plugin, bundle
+**Catalog**:
+The canonical `catalog.json` inventory. It contains one entry per external
+project.
 
-**Owned Skill**:
-An original skill whose instructions are authored and maintained in this
-repository. It can use an external dependency without copying that dependency.
-_Avoid_: Mirrored Skill, Adapter Skill
+**Setup**:
+One of the two roles that uses a catalog item: Copilot as Engineer or Hermes as
+Personal Assistant.
 
 **External Tool**:
-A plugin, skill collection, CLI, library, or MCP server maintained outside this
-repository.
-_Avoid_: Included Plugin, Marketplace Entry
+A CLI, skill, plugin, collection, or toolkit whose source is maintained outside
+this repository.
 
-**External Showcase**:
-The root README section that explains which External Tools Kaleb uses and links
-to their canonical source repositories.
-_Avoid_: Catalog, marketplace
+**Canonical Source**:
+The current first-party project or documentation URL. v0 uses live canonical
+links rather than pinned releases or commits.
 
 **Ownership Rule**:
-Only Owned Skills ship in the Owned Plugin. External Tool source is linked, not
-copied, pinned, repackaged, or updated here.
-_Avoid_: Mirror policy
+An entry documents current use but does not claim ownership. External source is
+linked, not copied, pinned, repackaged, installed, or updated here.

@@ -1,4 +1,4 @@
-name: Validate marketplace
+name: Validate catalog
 
 on:
   workflow_dispatch:
@@ -16,12 +16,5 @@ jobs:
     steps:
       - uses: actions/checkout@v5
 
-      - uses: actions/setup-node@v5
-        with:
-          node-version: 22
-
-      - name: Install Copilot CLI
-        run: npm install --global @github/copilot
-
-      - name: Validate owned plugin
-        run: bash scripts/validate-marketplace.sh
+      - name: Validate catalog
+        run: bash scripts/validate-catalog.sh
