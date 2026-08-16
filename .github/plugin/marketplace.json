@@ -14,7 +14,7 @@
       "source": {
         "source": "github",
         "repo": "mattpocock/skills",
-        "sha": "8b78b531ab965735c5dc74f6f7a219e1e37326df"
+        "sha": "068b6e0c62393147daf03530149cdce209c93da8"
       },
       "author": {
         "name": "Matt Pocock",
@@ -44,7 +44,7 @@
       "source": {
         "source": "github",
         "repo": "mvanhorn/cli-printing-press",
-        "sha": "8b2c361e37e50e6688ce21ac3bcdfd10a47c7432"
+        "sha": "6dc0ceed579f0f6fa42af0ccc1f0313b02e24e6d"
       },
       "author": {
         "name": "mvanhorn",
