@@ -14,7 +14,7 @@
       "source": {
         "source": "github",
         "repo": "mattpocock/skills",
-        "sha": "068b6e0c62393147daf03530149cdce209c93da8"
+        "sha": "9c9f36ccd3995266cd675468af71639c8dde1ec5"
       },
       "author": {
         "name": "Matt Pocock",
@@ -29,7 +29,7 @@
       "source": {
         "source": "github",
         "repo": "blader/humanizer",
-        "sha": "523374dee72d67c7b2b5f858ea0094ffda49c3ac"
+        "sha": "3b54ba74966f8203fd4e23be785175ebbb6b42c2"
       },
       "author": {
         "name": "blader",
@@ -44,7 +44,7 @@
       "source": {
         "source": "github",
         "repo": "mvanhorn/cli-printing-press",
-        "sha": "6dc0ceed579f0f6fa42af0ccc1f0313b02e24e6d"
+        "sha": "5d86945b112d80e80a126641c8d086d5ca8d6e76"
       },
       "author": {
         "name": "mvanhorn",
