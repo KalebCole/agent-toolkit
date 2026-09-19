@@ -44,7 +44,7 @@
       "source": {
         "source": "github",
         "repo": "mvanhorn/cli-printing-press",
-        "sha": "a5a8083d468f14efb8b8f50af2fe3203ffb0cbc6"
+        "sha": "baecf6a0975216ae69fb985fea8c5f9d4b32402e"
       },
       "author": {
         "name": "mvanhorn",
@@ -59,7 +59,7 @@
       "source": {
         "source": "github",
         "repo": "obra/superpowers",
-        "sha": "b36e0829c6d0140e93cfef2ca599b1b07d4a7797"
+        "sha": "5bf4e78011075bcfc0dc295f0724994cd123ee71"
       },
       "author": {
         "name": "Jesse Vincent",
