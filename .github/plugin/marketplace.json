@@ -29,7 +29,7 @@
       "source": {
         "source": "github",
         "repo": "blader/humanizer",
-        "sha": "9862685f575c65a8247f90369951df1b3416e3d6"
+        "sha": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8"
       },
       "author": {
         "name": "blader",
@@ -44,7 +44,7 @@
       "source": {
         "source": "github",
         "repo": "mvanhorn/cli-printing-press",
-        "sha": "30fd8194740f6dd3b8b09fc7139d1f60c71a3de0"
+        "sha": "622e5f51b9486b997d83251db8619dcd9797d951"
       },
       "author": {
         "name": "mvanhorn",
