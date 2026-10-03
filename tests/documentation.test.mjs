@@ -46,6 +46,28 @@ test("browse documentation excludes removed catalog items", async () => {
   }
 });
 
+test("Codex documentation separates marketplace registration from installation", async () => {
+  for (const file of ["README.md", "docs/usage.md"]) {
+    const document = await readFile(path.join(root, file), "utf8");
+    assert.match(document, /codex plugin marketplace add KalebCole\/kaleb-marketplace/);
+    assert.match(document, /codex plugin add <plugin-name>@kaleb-marketplace/);
+    assert.match(document, /does not\s+install/i);
+    assert.match(document, /new session/i);
+  }
+
+  const readme = await readFile(path.join(root, "README.md"), "utf8");
+  const catalog = JSON.parse(
+    await readFile(path.join(root, ".agents/plugins/marketplace.json"), "utf8"),
+  );
+  for (const plugin of catalog.plugins) {
+    assert.ok(!readme.includes(plugin.name), "README must link to the catalog, not list plugins");
+  }
+
+  const usage = await readFile(path.join(root, "docs/usage.md"), "utf8");
+  assert.match(usage, /Installation does not trust plugin hooks/);
+  assert.match(usage, /only for trusted projects/);
+});
+
 test("tracked files exclude the retired repository identity", async () => {
   const { stdout } = await execFileAsync(
     "git",

@@ -18,6 +18,17 @@ copilot plugin marketplace browse kaleb-marketplace
 copilot plugin install <plugin-name>@kaleb-marketplace
 ```
 
+### Codex
+
+```bash
+codex plugin marketplace add KalebCole/kaleb-marketplace
+codex plugin add <plugin-name>@kaleb-marketplace
+```
+
+Registration does not install plugins. You can also start Codex, run `/plugins`,
+choose `kaleb-marketplace`, and install a plugin. Start a new session after
+installation to load its skills and tools.
+
 ### Claude Code
 
 ```bash
