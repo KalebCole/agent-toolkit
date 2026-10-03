@@ -13,6 +13,7 @@ project publishes its own installer.
 ```bash
 copilot plugin marketplace add KalebCole/kaleb-marketplace
 claude plugin marketplace add KalebCole/kaleb-marketplace
+codex plugin marketplace add KalebCole/kaleb-marketplace
 ```
 
 The marketplace name inside both client catalogs is `kaleb-marketplace`.
