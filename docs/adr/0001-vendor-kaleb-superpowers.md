@@ -58,7 +58,10 @@ Only `brainstorming` is manual-only:
 
 All other retained skills keep upstream invocation behavior. The
 `brainstorming` content still hands approved designs to `writing-plans`, and
-the downstream planning and execution workflow remains intact.
+the downstream planning and execution workflow remains intact. Generated
+specs and plans are temporary review artifacts stored outside the repository;
+the workflow never adds or commits them. Implementation commits can still
+include product Markdown when the requested change requires it.
 
 ## Re-vendoring policy
 
@@ -77,6 +80,8 @@ release:
      runtime guidance;
    - omit the brainstorming visual companion, its instructions, and its
      local server files;
+   - store generated specs and plans outside the repository and never add or
+     commit those planning artifacts;
    - preserve OpenAI interface metadata for each retained skill and add
      matching metadata for skills not present in the pinned metadata source;
    - add the Claude/Copilot and Codex manual-only controls to

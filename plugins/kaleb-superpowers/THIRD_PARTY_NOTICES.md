@@ -16,7 +16,8 @@ This plugin is a frozen, reviewed copy of the runtime portions of
 renames the plugin to `kaleb-superpowers`, supports Claude Code, GitHub
 Copilot, and OpenAI Codex, omits the `using-superpowers` bootstrap and
 session-start injection, removes the brainstorming visual companion and its
-local server, and makes `brainstorming` manual-only. Codex interface metadata
-is copied from the OpenAI plugin package at the commit above. That package
-does not contain `diagnosing-superpowers`, so this plugin adds matching local
-display metadata for that retained upstream skill.
+local server, keeps generated specs and plans outside the repository, and
+makes `brainstorming` manual-only. Codex interface metadata is copied from
+the OpenAI plugin package at the commit above. That package does not contain
+`diagnosing-superpowers`, so this plugin adds matching local display metadata
+for that retained upstream skill.

@@ -176,6 +176,27 @@ test("retained runtime uses only the kaleb-superpowers namespace", async () => {
   }
 });
 
+test("planning artifacts stay outside the repository", async () => {
+  const markdownFiles = (await runtimeFiles(skillsRoot)).filter((file) =>
+    file.endsWith(".md"),
+  );
+
+  for (const file of markdownFiles) {
+    const contents = await readFile(file, "utf8");
+    assert.doesNotMatch(
+      contents,
+      /docs\/superpowers\/(?:plans|specs)/,
+      path.relative(pluginRoot, file),
+    );
+  }
+
+  for (const skill of ["brainstorming", "writing-plans"]) {
+    const contents = await readFile(path.join(skillsRoot, skill, "SKILL.md"), "utf8");
+    assert.match(contents, /outside the repository/);
+    assert.match(contents, /never (?:add|commit)/i);
+  }
+});
+
 test("kaleb-superpowers manifests identify the renamed frozen release", async () => {
   for (const manifestPath of [
     "plugin.json",
