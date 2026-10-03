@@ -62,6 +62,12 @@ test("kaleb-superpowers packages only the approved skill runtime", async () => {
     ".muse-plugin",
     ".opencode",
     ".pi",
+    "skills/brainstorming/scripts/frame-template.html",
+    "skills/brainstorming/scripts/helper.js",
+    "skills/brainstorming/scripts/server.cjs",
+    "skills/brainstorming/scripts/start-server.sh",
+    "skills/brainstorming/scripts/stop-server.sh",
+    "skills/brainstorming/visual-companion.md",
     "skills/systematic-debugging/CREATION-LOG.md",
     "skills/systematic-debugging/test-academic.md",
     "skills/systematic-debugging/test-pressure-1.md",
@@ -140,8 +146,6 @@ test("frozen runtime matches the reviewed checksum inventory", async () => {
   }
 
   for (const relativePath of [
-    "skills/brainstorming/scripts/start-server.sh",
-    "skills/brainstorming/scripts/stop-server.sh",
     "skills/executing-plans/scripts/task-done",
     "skills/executing-plans/scripts/task-start",
     "skills/subagent-driven-development/scripts/review-package",

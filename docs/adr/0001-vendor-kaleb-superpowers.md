@@ -38,7 +38,8 @@ The package supports exactly:
 The stored runtime includes all retained skills and their required scripts,
 references, templates, prompts, and assets. It excludes upstream tests,
 plans, release notes, Git history, development tooling, and runtime adapters
-for other clients.
+for other clients. It also excludes the optional brainstorming visual
+companion and its local server files.
 
 Remove `skills/using-superpowers/`, the session-start hook, and all manifest or
 configuration wiring that injected that bootstrap. Do not replace it with a
@@ -74,6 +75,8 @@ release:
    - omit `using-superpowers` and session-start injection;
    - remove retained references to the omitted bootstrap or unsupported
      runtime guidance;
+   - omit the brainstorming visual companion, its instructions, and its
+     local server files;
    - preserve OpenAI interface metadata for each retained skill and add
      matching metadata for skills not present in the pinned metadata source;
    - add the Claude/Copilot and Codex manual-only controls to
