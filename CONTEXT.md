@@ -1,42 +1,55 @@
-# Agent Toolkit
+# Kaleb Marketplace Context
 
-Agent Toolkit is a folder-first collection of agent tools and a curated
-distribution point for credited external plugins.
+Kaleb Marketplace is a personal, public marketplace for selected agent
+plugins. It is not a universal package manager and does not promise automatic
+cross-client compatibility.
 
 ## Language
 
-**Core Plugin**:
-The single Agent Toolkit plugin containing skills, agents, and hooks maintained
-in this repository. It is a later release milestone and is not part of
-Marketplace v0.
-_Avoid_: Catalog plugin, universal manifest
+**Local Stored Plugin**:
+An independently installable Agent Plugins 1.0 package stored under
+`plugins/<name>/`. It contains a root `plugin.json` and portable components in
+fixed standard locations.
+_Avoid_: bundle, copied external repository
 
-**Curated Marketplace**:
-The Agent Toolkit Copilot marketplace containing selected external plugins.
-Registration installs nothing; users choose each plugin.
-_Avoid_: Bundle, plugin pack
+**Maintained External Plugin Reference**:
+A catalog entry that keeps plugin content in the author's repository and pins
+one exact reviewed commit. Weekly automation can propose a new pin in a pull
+request.
+_Avoid_: vendored plugin, automatic compatibility
 
-**Marketplace v0**:
-The first public release of the Curated Marketplace. It contains only credited
-External Plugins and does not contain an empty or synthetic Core Plugin.
-_Avoid_: Core Plugin v0, source bundle
+**Native External Installer**:
+The installation path published and supported by an external project. The
+marketplace documents this path instead of creating a wrapper.
+_Avoid_: catalog workaround, generated adapter
 
-**External Plugin**:
-A plugin listed by the Curated Marketplace but authored, sourced, and updated
-from its Source Repository. Agent Toolkit pins each plugin to an exact commit.
-_Avoid_: Agent Toolkit plugin, included source
+**Canonical Catalog**:
+The hand-edited `.agents/plugins/marketplace.json` file. It records local
+paths and exact external Git pins in native marketplace source forms.
+_Avoid_: entry file, private catalog model
 
-**Catalog Entry**:
-One tool folder containing an `entry.json` file. It records identity,
-classification, authorship, Source Repository, and pinned source commit.
-_Avoid_: Pointer card, Markdown entry
+**Generated Client Catalog**:
+Either `.github/plugin/marketplace.json` or
+`.claude-plugin/marketplace.json`. It is a deterministic projection of the
+Canonical Catalog and must not be edited by hand.
+_Avoid_: second source of truth
 
-**Source Repository**:
-The external GitHub repository that owns and maintains a Catalog Entry's
-source. Agent Toolkit stores a pin and metadata, not a source copy.
-_Avoid_: Upstream, vendored repository
+**Reviewed Pin**:
+The exact 40-character commit stored in the Canonical Catalog after a person
+reviews and merges its update pull request.
+_Avoid_: latest version, floating branch
 
-**Pin Update**:
-An automated pull request that moves a Catalog Entry from one exact source
-commit to another after clean installation checks pass.
-_Avoid_: Source import, vendoring
+**Frozen Skill Copy**:
+An intentionally stored skill whose source text, license, source repository,
+path, and copied commit are recorded in `THIRD_PARTY_NOTICES.md`. Automation
+does not update it.
+_Avoid_: maintained external reference
+
+## Current scope
+
+- `kaleb-skills` is the only Local Stored Plugin.
+- Humanizer, Visual Explainer, and i-have-adhd are Maintained External Plugin
+  References.
+- Impeccable is documented through its Native External Installer.
+- Client catalogs contain only mappings that preserve the pinned native
+  package layout.
