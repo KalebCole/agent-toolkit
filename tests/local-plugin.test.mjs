@@ -61,6 +61,27 @@ disable-model-invocation: true
 Call the Skill tool with "grilling".
 `;
 
+const expectedSkillGrill = `---
+name: skill-grill
+description: Grill the user on creating or improving a skill, then build and dogfood it through a dedicated child session.
+disable-model-invocation: true
+---
+
+Run a \`/grilling\` session using \`/skill-creator\` to reach a shared understanding of the skill the user wants to create or improve.
+
+When the shared understanding is confirmed:
+
+1. Create one dedicated child session to implement the skill. Use a project worktree when a repository owns the target skill. Otherwise, use the user skill location. Send the child a concise packet with the settled requirements, examples, target location, and relevant context.
+2. Tell the child to use \`/skill-creator\` to create or improve the skill.
+3. When the child reports that the skill is ready, test it live with the user in the parent session. Ask for confirmation before any consequential action.
+4. Wait until the user gives clear feedback. Send the feedback and evidence to the same child session. Ask it to update the skill.
+5. Repeat the live test and revision loop until the user accepts the result. Do not use a fixed iteration limit.
+6. Ask the child to perform final validation with \`/skill-creator\`.
+7. Ask the user whether to commit the changes and create or update a pull request.
+
+Keep implementation work in the child session. Keep the live test and user feedback in the parent session.
+`;
+
 const expectedLicense = `MIT License
 
 Copyright (c) 2026 Matt Pocock
@@ -147,6 +168,7 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
     "grilling",
     "obsidian-cli",
     "obsidian-markdown",
+    "skill-grill",
   ]);
 
   const manifest = JSON.parse(await readFile(path.join(pluginRoot, "plugin.json"), "utf8"));
@@ -158,6 +180,17 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
   assert.match(notices, /8603380821fee6a77c82639f364ce8fe4f5a92be/);
   assert.match(notices, /mattpocock\/skills/);
   assert.match(notices, /d81f3a183412e71a5b1e84ca21bc1a35eea03a60/);
+  assert.match(notices, /gist\.github\.com\/KalebCole\/4fe88e38bcc025d7e288d094b9a612d1/);
+  assert.match(notices, /b511d22e5def97787fd7e1a1a6e1f1703d71f7b1/);
+  assert.match(
+    notices,
+    /reviewed gist revision has no license file or license\s+declaration/i,
+  );
+  assert.match(notices, /removed the redundant `user-invocable` frontmatter line/i);
+  assert.match(
+    notices,
+    /Kept\s+`disable-model-invocation: true` unchanged/,
+  );
   assert.match(notices, /kepano\/obsidian-skills/);
   assert.equal(
     (notices.match(/3ccff5338ea700537839b21900aa5358a0402c98/g) ?? []).length,
@@ -175,6 +208,7 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
     ["bro", expectedBroSkill],
     ["grill-me", expectedGrillMeSkill],
     ["grilling", expectedGrillingSkill],
+    ["skill-grill", expectedSkillGrill],
   ]);
   const expectedObsidianMetadata = new Map([
     [
@@ -229,6 +263,11 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
     .sort();
   assert.deepEqual(actualObsidianFiles, [...obsidianSkillFiles.keys()].sort());
 
+  assert.deepEqual(
+    await readdir(path.join(skillRoot, "skill-grill")),
+    ["SKILL.md"],
+  );
+
   for (const [relativePath, expectedHash] of obsidianSkillFiles) {
     const content = await readFile(path.join(skillRoot, relativePath));
     assert.equal(
@@ -237,4 +276,16 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
       `${relativePath} must match the reviewed upstream content`,
     );
   }
+});
+
+test("skill-grill keeps model invocation disabled and omits user-invocable", async () => {
+  const skillDocument = await readFile(
+    path.join(skillRoot, "skill-grill", "SKILL.md"),
+    "utf8",
+  );
+  const frontmatter = parseFrontmatter(skillDocument);
+
+  assert.equal(frontmatter.name, "skill-grill");
+  assert.equal(frontmatter["disable-model-invocation"], true);
+  assert.equal("user-invocable" in frontmatter, false);
 });
