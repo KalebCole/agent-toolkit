@@ -23,16 +23,32 @@ Install one item at a time:
 
 ```bash
 copilot plugin install kaleb-skills@kaleb-marketplace
+copilot plugin install kaleb-superpowers@kaleb-marketplace
 claude plugin install kaleb-skills@kaleb-marketplace
+claude plugin install kaleb-superpowers@kaleb-marketplace
 ```
 
-Available marketplace names are `kaleb-skills`, `humanizer`,
-`visual-explainer`, and `i-have-adhd`.
+Available marketplace names are `kaleb-skills`, `kaleb-superpowers`,
+`humanizer`, `visual-explainer`, and `i-have-adhd`.
 
 The local package follows Agent Plugins 1.0. External entries use the native
 package layout at the exact commit in `.agents/plugins/marketplace.json`.
 Successful validation for one client is not proof of support for another
 client.
+
+## Kaleb Superpowers
+
+`kaleb-superpowers` is a frozen runtime snapshot of Superpowers 6.4.2 for
+Claude Code, GitHub Copilot, and OpenAI Codex. Invoke `brainstorming`
+explicitly. The plugin does not inject a session-start bootstrap or a global
+routing instruction. The other retained skills preserve their upstream
+invocation descriptions and workflow, including the handoff from
+`brainstorming` to `writing-plans`.
+
+For Codex, every retained skill includes `agents/openai.yaml` interface
+metadata. Only the `brainstorming` file disables implicit invocation. Claude
+Code and the user's Copilot loader use `disable-model-invocation: true` in the
+skill frontmatter.
 
 ## Native installation
 

@@ -8,13 +8,15 @@ node "$root/scripts/catalog.mjs" check
 npm test
 node "$root/scripts/validate-marketplace.mjs"
 
-test_home="$(mktemp -d)"
+test_home="$root/.validation-home"
+rm -rf "$test_home"
+mkdir -p "$test_home"
 trap 'rm -rf "$test_home"' EXIT
 
 if command -v copilot >/dev/null 2>&1; then
   COPILOT_HOME="$test_home" copilot plugin marketplace add "$root"
   COPILOT_HOME="$test_home" copilot plugin marketplace browse kaleb-marketplace --json >/dev/null
-  for plugin in kaleb-skills humanizer visual-explainer i-have-adhd; do
+  for plugin in kaleb-skills kaleb-superpowers humanizer visual-explainer i-have-adhd; do
     COPILOT_HOME="$test_home" copilot plugin install "$plugin@kaleb-marketplace"
   done
   echo "Copilot catalog and clean install checks passed"

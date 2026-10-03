@@ -17,6 +17,18 @@
       "category": "Productivity"
     },
     {
+      "name": "kaleb-superpowers",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kaleb-superpowers"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    },
+    {
       "name": "humanizer",
       "source": {
         "source": "url",

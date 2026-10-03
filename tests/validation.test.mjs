@@ -1,8 +1,8 @@
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, writeFile } from "node:fs/promises";
-import os from "node:os";
+import { mkdir, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
-import test from "node:test";
+import { fileURLToPath } from "node:url";
+import test, { after } from "node:test";
 
 import {
   validateLocalPlugins,
@@ -11,9 +11,15 @@ import {
 } from "../scripts/validate-marketplace.mjs";
 
 const sha = "0123456789012345678901234567890123456789";
+const repoRoot = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
+const scratchRoot = path.join(repoRoot, ".test-scratch", "validation");
+
+after(() => rm(scratchRoot, { recursive: true, force: true }));
 
 test("validateSkill rejects a frontmatter name that differs from its directory", async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), "kaleb-skill-"));
+  const root = path.join(scratchRoot, "skill-name");
+  await rm(root, { recursive: true, force: true });
+  await mkdir(root, { recursive: true });
   const skillRoot = path.join(root, "actual-name");
   await mkdir(skillRoot);
   const skillPath = path.join(skillRoot, "SKILL.md");
@@ -26,7 +32,8 @@ test("validateSkill rejects a frontmatter name that differs from its directory",
 });
 
 test("validateLocalPlugins requires a license", async () => {
-  const root = await mkdtemp(path.join(os.tmpdir(), "kaleb-plugin-"));
+  const root = path.join(scratchRoot, "missing-license");
+  await rm(root, { recursive: true, force: true });
   await mkdir(path.join(root, "schemas"), { recursive: true });
   await mkdir(path.join(root, "plugins", "kaleb-skills", "skills", "bro"), {
     recursive: true,

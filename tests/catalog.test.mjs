@@ -1,11 +1,10 @@
 import assert from "node:assert/strict";
 import { readFile, rm, mkdir, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
-import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
-import test from "node:test";
+import test, { after } from "node:test";
 
 import {
   generateClaudeCatalog,
@@ -16,7 +15,7 @@ import {
 
 const execFileAsync = promisify(execFile);
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
-const scratchRoot = join(tmpdir(), "kaleb-marketplace-tests");
+const scratchRoot = join(repoRoot, ".test-scratch", "catalog");
 const scriptPath = join(repoRoot, "scripts", "catalog.mjs");
 const validateScriptPath = join(repoRoot, "scripts", "validate-marketplace.sh");
 const sha = "0123456789012345678901234567890123456789";
@@ -29,6 +28,8 @@ const baseCatalog = {
   plugins: [],
 };
 
+after(() => rm(scratchRoot, { recursive: true, force: true }));
+
 test("loadCanonicalCatalog reads the canonical marketplace order", async () => {
   const catalog = await loadCanonicalCatalog();
 
@@ -36,7 +37,13 @@ test("loadCanonicalCatalog reads the canonical marketplace order", async () => {
   assert.equal(catalog.interface.displayName, "Kaleb Marketplace");
   assert.deepEqual(
     catalog.plugins.map((plugin) => plugin.name),
-    ["kaleb-skills", "humanizer", "visual-explainer", "i-have-adhd"],
+    [
+      "kaleb-skills",
+      "kaleb-superpowers",
+      "humanizer",
+      "visual-explainer",
+      "i-have-adhd",
+    ],
   );
 });
 

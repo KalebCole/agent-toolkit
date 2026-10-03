@@ -15,6 +15,12 @@ For frozen copies, preserve the reviewed source text exactly. Record the
 original repository, source path, exact copied commit, copyright notice, and
 license in `THIRD_PARTY_NOTICES.md`. Do not add an automatic updater.
 
+The `kaleb-superpowers` frozen runtime has a narrower, recorded re-vendoring
+procedure. Follow [ADR 0001](adr/0001-vendor-kaleb-superpowers.md), review the
+new immutable upstream source manually, and reapply only the listed intentional
+deltas. Do not add a scheduled updater, generator, install-time mutation, or
+automatic sync.
+
 ## Maintained external plugin reference
 
 Add a native pinned source to `.agents/plugins/marketplace.json`. Do not copy

@@ -44,6 +44,18 @@ The job changes one canonical pin, regenerates both client catalogs, and runs
 full validation. It never auto-merges. Frozen local skill copies are outside
 this workflow.
 
+## Kaleb Superpowers re-vendoring
+
+Update `kaleb-superpowers` only through a manual, reviewed source replacement.
+Resolve an immutable upstream release and commit, review its complete runtime,
+copy only the Claude Code, GitHub Copilot, and OpenAI Codex runtime files, and
+reapply the concise deltas in
+[ADR 0001](adr/0001-vendor-kaleb-superpowers.md). Then update its notice,
+decision record, focused validation, and generated catalogs together.
+
+Do not create a scheduled updater, generator, install-time mutation, or
+automatic sync for this plugin.
+
 ## Native installer documentation
 
 Check Impeccable's upstream guide before changing the documented commands:

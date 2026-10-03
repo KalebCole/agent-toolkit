@@ -13,6 +13,11 @@
       "category": "Productivity"
     },
     {
+      "name": "kaleb-superpowers",
+      "source": "./plugins/kaleb-superpowers",
+      "category": "Developer Tools"
+    },
+    {
       "name": "humanizer",
       "source": {
         "source": "url",

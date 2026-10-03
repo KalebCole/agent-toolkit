@@ -45,9 +45,19 @@ path, and copied commit are recorded in `THIRD_PARTY_NOTICES.md`. Automation
 does not update it.
 _Avoid_: maintained external reference
 
+**Frozen Runtime Plugin**:
+An intentionally stored, reviewed runtime snapshot of an upstream plugin.
+Its source release, exact commit, supported clients, license, and deliberate
+local changes are recorded in an architecture decision record and
+`THIRD_PARTY_NOTICES.md`. Automation does not update it.
+_Avoid_: maintained external reference, automatic fork
+
 ## Current scope
 
-- `kaleb-skills` is the only Local Stored Plugin.
+- `kaleb-skills` and `kaleb-superpowers` are Local Stored Plugins.
+- `kaleb-superpowers` is a Frozen Runtime Plugin for Claude Code, GitHub
+  Copilot, and OpenAI Codex. Its `brainstorming` skill is manual-only; its
+  upstream conversation bootstrap is intentionally omitted.
 - Humanizer, Visual Explainer, and i-have-adhd are Maintained External Plugin
   References.
 - Impeccable is documented through its Native External Installer.

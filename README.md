@@ -21,14 +21,17 @@ Kaleb Marketplace uses three distribution paths:
 | Item | Path | Source |
 |---|---|---|
 | Kaleb Skills (`bro`, `grilling`, `grill-me`) | Local stored plugin | [`plugins/kaleb-skills`](plugins/kaleb-skills/) |
+| Kaleb Superpowers | Frozen local runtime plugin | [`plugins/kaleb-superpowers`](plugins/kaleb-superpowers/) |
 | Humanizer | Maintained external plugin reference | [`blader/humanizer`](https://github.com/blader/humanizer) |
 | Visual Explainer | Maintained external plugin reference | [`nicobailon/visual-explainer`](https://github.com/nicobailon/visual-explainer) |
 | i-have-adhd | Maintained external plugin reference | [`ayghri/i-have-adhd`](https://github.com/ayghri/i-have-adhd) |
 | Impeccable | Native external installer | [`pbakaus/impeccable`](https://github.com/pbakaus/impeccable) |
 
-The canonical catalog is
-`.agents/plugins/marketplace.json`. The Copilot and Claude catalogs are
-generated from it. External plugin content is not copied into this repository.
+The canonical catalog is `.agents/plugins/marketplace.json`. The Copilot and
+Claude catalogs are generated from it. External reference content is not
+copied into this repository. Kaleb Superpowers is the deliberate exception:
+it is a frozen, attributable runtime snapshot rather than an external
+reference.
 
 ## Install from the marketplace
 
@@ -38,6 +41,7 @@ generated from it. External plugin content is not copied into this repository.
 copilot plugin marketplace add KalebCole/agent-toolkit
 copilot plugin marketplace browse kaleb-marketplace
 copilot plugin install kaleb-skills@kaleb-marketplace
+copilot plugin install kaleb-superpowers@kaleb-marketplace
 ```
 
 Replace `kaleb-skills` with `humanizer`, `visual-explainer`, or
@@ -48,11 +52,14 @@ Replace `kaleb-skills` with `humanizer`, `visual-explainer`, or
 ```bash
 claude plugin marketplace add KalebCole/agent-toolkit
 claude plugin install kaleb-skills@kaleb-marketplace
+claude plugin install kaleb-superpowers@kaleb-marketplace
 ```
 
-Client support is documented only where the pinned package layout can be
-mapped without an adapter. See [usage](docs/usage.md) for the tested support
-boundary and native source paths.
+Kaleb Superpowers supports Claude Code, GitHub Copilot, and OpenAI Codex. Its
+`brainstorming` skill must be invoked manually; all other retained skills keep
+their upstream invocation behavior. See [usage](docs/usage.md) for the tested
+support boundary and [ADR 0001](docs/adr/0001-vendor-kaleb-superpowers.md) for
+the frozen-source decision and limitations.
 
 ## Install Impeccable
 
@@ -76,7 +83,7 @@ local Agent Plugins and Agent Skills layouts, licenses and notices, exact
 external pins, source package markers, and available client catalog checks.
 
 Weekly automation opens one pull request for each changed maintained external
-plugin. It never auto-merges. Frozen local skills are not updated by
+plugin. It never auto-merges. Frozen local content is not updated by
 automation.
 
 See [contributing](docs/contributing.md),
