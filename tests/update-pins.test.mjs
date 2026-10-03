@@ -6,6 +6,7 @@ import { findUpdates, updatePin } from "../scripts/catalog.mjs";
 const oldSha = "0123456789012345678901234567890123456789";
 const newSha = "abcdefabcdefabcdefabcdefabcdefabcdefabcd";
 const visualSha = "1111111111111111111111111111111111111111";
+const pstackSha = "2222222222222222222222222222222222222222";
 const catalog = {
   plugins: [
     {
@@ -31,20 +32,39 @@ const catalog = {
         sha: visualSha,
       },
     },
+    {
+      name: "pstack",
+      source: {
+        source: "git-subdir",
+        url: "https://github.com/michael-denyer/pstack-claude.git",
+        path: "plugins/pstack",
+        ref: "main",
+        sha: pstackSha,
+      },
+    },
   ],
 };
 
 test("findUpdates emits one matrix entry for each changed external", async () => {
-  const result = await findUpdates(catalog, async (source) =>
-    source.url.includes("humanizer") ? newSha : source.sha,
-  );
-  assert.deepEqual(result, { include: [{ name: "humanizer" }] });
+  const result = await findUpdates(catalog, async (source) => {
+    if (source.url.includes("humanizer")) {
+      return newSha;
+    }
+    if (source.url.includes("pstack-claude")) {
+      return newSha;
+    }
+    return source.sha;
+  });
+  assert.deepEqual(result, {
+    include: [{ name: "humanizer" }, { name: "pstack" }],
+  });
 });
 
 test("updatePin changes only the named external", () => {
-  const updated = updatePin(catalog, "humanizer", newSha);
-  assert.equal(updated.plugins[1].source.sha, newSha);
+  const updated = updatePin(catalog, "pstack", newSha);
+  assert.equal(updated.plugins[1].source.sha, oldSha);
   assert.equal(updated.plugins[2].source.sha, visualSha);
+  assert.equal(updated.plugins[3].source.sha, newSha);
   assert.throws(
     () => updatePin(catalog, "kaleb-skills", newSha),
     /not external/,

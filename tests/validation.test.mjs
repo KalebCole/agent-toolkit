@@ -78,3 +78,32 @@ test("verifyExternalSource reports unavailable pinned content", async () => {
     /humanizer.*0123456.*not available/,
   );
 });
+
+test("verifyExternalSource checks pstack client manifests and license", async () => {
+  const entry = {
+    name: "pstack",
+    source: {
+      source: "git-subdir",
+      url: "https://github.com/michael-denyer/pstack-claude.git",
+      path: "plugins/pstack",
+      sha,
+    },
+  };
+  const requested = [];
+  const available = async (url) => {
+    requested.push(url);
+    return { ok: true };
+  };
+
+  await verifyExternalSource(entry, available);
+
+  assert.deepEqual(
+    requested.map((url) => new URL(url).pathname),
+    [
+      `/repos/michael-denyer/pstack-claude/commits/${sha}`,
+      "/repos/michael-denyer/pstack-claude/contents/plugins/pstack/.claude-plugin/plugin.json",
+      "/repos/michael-denyer/pstack-claude/contents/plugins/pstack/.codex-plugin/plugin.json",
+      "/repos/michael-denyer/pstack-claude/contents/LICENSE",
+    ],
+  );
+});

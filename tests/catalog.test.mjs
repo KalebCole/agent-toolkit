@@ -36,8 +36,25 @@ test("loadCanonicalCatalog reads the canonical marketplace order", async () => {
   assert.equal(catalog.interface.displayName, "Kaleb Marketplace");
   assert.deepEqual(
     catalog.plugins.map((plugin) => plugin.name),
-    ["kaleb-skills", "humanizer", "visual-explainer", "i-have-adhd"],
+    ["kaleb-skills", "humanizer", "visual-explainer", "i-have-adhd", "pstack"],
   );
+
+  const pstack = catalog.plugins.find((plugin) => plugin.name === "pstack");
+  assert.deepEqual(pstack, {
+    name: "pstack",
+    source: {
+      source: "git-subdir",
+      url: "https://github.com/michael-denyer/pstack-claude.git",
+      path: "plugins/pstack",
+      ref: "main",
+      sha: "55430ba22ccc751ab608422761aff14b2f063e5d",
+    },
+    policy: {
+      installation: "AVAILABLE",
+      authentication: "ON_INSTALL",
+    },
+    category: "Developer Tools",
+  });
 });
 
 test("generateCopilotCatalog maps local sources to relative paths", () => {
@@ -100,6 +117,40 @@ test("generateClaudeCatalog preserves external URL source details", () => {
     sha,
   });
   assert.equal("policy" in generated.plugins[0], false);
+});
+
+test("generators preserve the pinned pstack subdirectory for each client", async () => {
+  const catalog = await loadCanonicalCatalog();
+  const copilot = generateCopilotCatalog(catalog);
+  const claude = generateClaudeCatalog(catalog);
+
+  assert.deepEqual(
+    copilot.plugins.find((plugin) => plugin.name === "pstack"),
+    {
+      name: "pstack",
+      source: {
+        source: "github",
+        repo: "michael-denyer/pstack-claude",
+        path: "plugins/pstack",
+        sha: "55430ba22ccc751ab608422761aff14b2f063e5d",
+      },
+      category: "Developer Tools",
+    },
+  );
+  assert.deepEqual(
+    claude.plugins.find((plugin) => plugin.name === "pstack"),
+    {
+      name: "pstack",
+      source: {
+        source: "git-subdir",
+        url: "https://github.com/michael-denyer/pstack-claude.git",
+        path: "plugins/pstack",
+        ref: "main",
+        sha: "55430ba22ccc751ab608422761aff14b2f063e5d",
+      },
+      category: "Developer Tools",
+    },
+  );
 });
 
 test("generateCopilotCatalog rejects unmappable external archive URLs", () => {

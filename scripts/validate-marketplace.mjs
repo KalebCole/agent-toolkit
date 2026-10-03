@@ -26,6 +26,11 @@ const externalMarkers = {
     "skills/i-have-adhd/SKILL.md",
     "LICENSE",
   ],
+  pstack: [
+    "plugins/pstack/.claude-plugin/plugin.json",
+    "plugins/pstack/.codex-plugin/plugin.json",
+    "LICENSE",
+  ],
 };
 
 function githubRepo(url) {
