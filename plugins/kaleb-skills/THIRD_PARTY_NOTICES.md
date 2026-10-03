@@ -37,3 +37,31 @@ This plugin contains frozen copies of reviewed upstream skill files.
   `Copyright (c) 2026 Matt Pocock`
 - License status: MIT; `LICENSE` in this plugin reproduces the reviewed MIT
   text from the source repository.
+
+## `obsidian-cli`
+
+- Source repository: `https://github.com/kepano/obsidian-skills`
+- Reviewed commit: `3ccff5338ea700537839b21900aa5358a0402c98`
+- Original source path: `skills/obsidian-cli/SKILL.md`
+- Copied file: `skills/obsidian-cli/SKILL.md`
+- Reviewed license path: `LICENSE`
+- Copyright notice:
+  `Copyright (c) 2026 Steph Ango (@kepano)`
+- License status: MIT; `LICENSE` in this plugin reproduces the reviewed MIT
+  text from the source repository.
+
+## `obsidian-markdown`
+
+- Source repository: `https://github.com/kepano/obsidian-skills`
+- Reviewed commit: `3ccff5338ea700537839b21900aa5358a0402c98`
+- Original source path: `skills/obsidian-markdown/SKILL.md`
+- Copied files:
+  - `skills/obsidian-markdown/SKILL.md`
+  - `skills/obsidian-markdown/references/CALLOUTS.md`
+  - `skills/obsidian-markdown/references/EMBEDS.md`
+  - `skills/obsidian-markdown/references/PROPERTIES.md`
+- Reviewed license path: `LICENSE`
+- Copyright notice:
+  `Copyright (c) 2026 Steph Ango (@kepano)`
+- License status: MIT; `LICENSE` in this plugin reproduces the reviewed MIT
+  text from the source repository.
