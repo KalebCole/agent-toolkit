@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { readFile, rm, mkdir, writeFile } from "node:fs/promises";
 import { dirname, join } from "node:path";
+import { tmpdir } from "node:os";
 import { fileURLToPath } from "node:url";
 import { execFile } from "node:child_process";
 import { promisify } from "node:util";
@@ -15,7 +16,7 @@ import {
 
 const execFileAsync = promisify(execFile);
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
-const scratchRoot = join(repoRoot, "tests", ".scratch");
+const scratchRoot = join(tmpdir(), "kaleb-marketplace-tests");
 const scriptPath = join(repoRoot, "scripts", "catalog.mjs");
 const validateScriptPath = join(repoRoot, "scripts", "validate-marketplace.sh");
 const sha = "0123456789012345678901234567890123456789";
@@ -58,10 +59,11 @@ test("generateCopilotCatalog maps local sources to relative paths", () => {
     ],
   };
 
-  assert.deepEqual(
-    generateCopilotCatalog(localCatalog).plugins[0].source,
-    "./plugins/kaleb-skills",
-  );
+  const generated = generateCopilotCatalog(localCatalog);
+  assert.equal(generated.owner.name, "Kaleb Cole");
+  assert.equal(generated.metadata.version, "1.0.0");
+  assert.deepEqual(generated.plugins[0].source, "./plugins/kaleb-skills");
+  assert.equal("policy" in generated.plugins[0], false);
 });
 
 test("generateClaudeCatalog preserves external URL source details", () => {
@@ -85,12 +87,19 @@ test("generateClaudeCatalog preserves external URL source details", () => {
     ],
   };
 
-  assert.deepEqual(generateClaudeCatalog(externalCatalog).plugins[0].source, {
+  const generated = generateClaudeCatalog(externalCatalog);
+  assert.equal(
+    generated.$schema,
+    "https://json.schemastore.org/claude-code-marketplace.json",
+  );
+  assert.equal(generated.owner.name, "Kaleb Cole");
+  assert.deepEqual(generated.plugins[0].source, {
     source: "url",
     url: "https://github.com/example/tool.git",
     ref: "main",
     sha,
   });
+  assert.equal("policy" in generated.plugins[0], false);
 });
 
 test("generateCopilotCatalog rejects unmappable external archive URLs", () => {

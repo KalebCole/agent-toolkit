@@ -200,12 +200,31 @@ export async function loadCanonicalCatalog(root = process.cwd()) {
 }
 
 function generateCatalog(catalog, target) {
+  const plugins = catalog.plugins.map((plugin) => normalizePlugin(plugin, target));
+
+  if (target === "copilot") {
+    return {
+      name: catalog.name,
+      owner: {
+        name: "Kaleb Cole",
+      },
+      metadata: {
+        description: "Kaleb's personal public marketplace of selected agent plugins.",
+        version: "1.0.0",
+      },
+      plugins: plugins.map(({ policy, ...plugin }) => plugin),
+    };
+  }
+
   return {
+    $schema: "https://json.schemastore.org/claude-code-marketplace.json",
     name: catalog.name,
-    interface: {
-      displayName: catalog.interface.displayName,
+    description: "Kaleb's personal public marketplace of selected agent plugins.",
+    owner: {
+      name: "Kaleb Cole",
+      url: "https://github.com/KalebCole",
     },
-    plugins: catalog.plugins.map((plugin) => normalizePlugin(plugin, target)),
+    plugins: plugins.map(({ policy, ...plugin }) => plugin),
   };
 }
 
@@ -344,7 +363,10 @@ async function runVerifySources(root) {
   for (const plugin of catalog.plugins) {
     validateSourceShape(plugin);
     if (plugin.source.source !== "local") {
-      githubRepo(plugin.source.url);
+      const repo = githubRepo(plugin.source.url);
+      await getJson(
+        `https://api.github.com/repos/${repo}/commits/${encodeURIComponent(plugin.source.sha)}`,
+      );
     }
   }
 }
@@ -353,7 +375,7 @@ async function runCheckUpdates(root, { json = false } = {}) {
   const catalog = await loadCanonicalCatalog(root);
   const updates = await findUpdates(catalog);
   if (json) {
-    console.log(renderJson(updates).trimEnd());
+    console.log(JSON.stringify(updates));
     return;
   }
 
@@ -381,6 +403,10 @@ async function runUpdate(root, name) {
       continue;
     }
 
+    const repo = githubRepo(plugin.source.url);
+    await getJson(
+      `https://api.github.com/repos/${repo}/commits/${encodeURIComponent(nextSha)}`,
+    );
     console.log(`${entry.name}: ${plugin.source.sha} -> ${nextSha}`);
     nextCatalog = updatePin(nextCatalog, entry.name, nextSha);
   }

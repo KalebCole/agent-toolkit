@@ -1,16 +1,16 @@
 {
   "name": "kaleb-marketplace",
-  "interface": {
-    "displayName": "Kaleb Marketplace"
+  "owner": {
+    "name": "Kaleb Cole"
+  },
+  "metadata": {
+    "description": "Kaleb's personal public marketplace of selected agent plugins.",
+    "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "kaleb-skills",
       "source": "./plugins/kaleb-skills",
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
       "category": "Productivity"
     },
     {
@@ -19,10 +19,6 @@
         "source": "github",
         "repo": "blader/humanizer",
         "sha": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
       },
       "category": "Productivity"
     },
@@ -34,10 +30,6 @@
         "path": "plugins/visual-explainer",
         "sha": "5846f5aef34a23c8fea389d2f23ce56224cbf840"
       },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
-      },
       "category": "Productivity"
     },
     {
@@ -46,10 +38,6 @@
         "source": "github",
         "repo": "ayghri/i-have-adhd",
         "sha": "839872f9d1cd634fed642b4589ce7226199cc15f"
-      },
-      "policy": {
-        "installation": "AVAILABLE",
-        "authentication": "ON_INSTALL"
       },
       "category": "Productivity"
     }
