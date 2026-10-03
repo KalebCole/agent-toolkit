@@ -38,18 +38,6 @@ This plugin contains frozen copies of reviewed upstream skill files.
 - License status: MIT; `LICENSE` in this plugin reproduces the reviewed MIT
   text from the source repository.
 
-## `skill-grill`
-
-- Source: `https://gist.github.com/KalebCole/4fe88e38bcc025d7e288d094b9a612d1`
-- Reviewed revision: `b511d22e5def97787fd7e1a1a6e1f1703d71f7b1`
-- Original source path: `SKILL.md`
-- Copied file: `skills/skill-grill/SKILL.md`
-- Tailoring: removed the redundant `user-invocable` frontmatter line. Kept
-  `disable-model-invocation: true` unchanged; model invocation remains disabled.
-- License status: The reviewed gist revision has no license file or license
-  declaration. This copy was requested in issue #63; no upstream license is
-  claimed.
-
 ## `obsidian-cli`
 
 - Source repository: `https://github.com/kepano/obsidian-skills`

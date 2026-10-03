@@ -180,17 +180,6 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
   assert.match(notices, /8603380821fee6a77c82639f364ce8fe4f5a92be/);
   assert.match(notices, /mattpocock\/skills/);
   assert.match(notices, /d81f3a183412e71a5b1e84ca21bc1a35eea03a60/);
-  assert.match(notices, /gist\.github\.com\/KalebCole\/4fe88e38bcc025d7e288d094b9a612d1/);
-  assert.match(notices, /b511d22e5def97787fd7e1a1a6e1f1703d71f7b1/);
-  assert.match(
-    notices,
-    /reviewed gist revision has no license file or license\s+declaration/i,
-  );
-  assert.match(notices, /removed the redundant `user-invocable` frontmatter line/i);
-  assert.match(
-    notices,
-    /Kept\s+`disable-model-invocation: true` unchanged/,
-  );
   assert.match(notices, /kepano\/obsidian-skills/);
   assert.equal(
     (notices.match(/3ccff5338ea700537839b21900aa5358a0402c98/g) ?? []).length,
