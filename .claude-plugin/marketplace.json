@@ -1,11 +1,10 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "kaleb-marketplace",
+  "description": "Kaleb's personal public marketplace of selected agent plugins.",
   "owner": {
-    "name": "Kaleb Cole"
-  },
-  "metadata": {
-    "description": "Kaleb's personal public marketplace of selected agent plugins.",
-    "version": "1.0.0"
+    "name": "Kaleb Cole",
+    "url": "https://github.com/KalebCole"
   },
   "plugins": [
     {
@@ -16,8 +15,9 @@
     {
       "name": "humanizer",
       "source": {
-        "source": "github",
-        "repo": "blader/humanizer",
+        "source": "url",
+        "url": "https://github.com/blader/humanizer.git",
+        "ref": "main",
         "sha": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8"
       },
       "category": "Productivity"
@@ -25,9 +25,10 @@
     {
       "name": "visual-explainer",
       "source": {
-        "source": "github",
-        "repo": "nicobailon/visual-explainer",
+        "source": "git-subdir",
+        "url": "https://github.com/nicobailon/visual-explainer.git",
         "path": "plugins/visual-explainer",
+        "ref": "main",
         "sha": "5846f5aef34a23c8fea389d2f23ce56224cbf840"
       },
       "category": "Productivity"
@@ -35,8 +36,9 @@
     {
       "name": "i-have-adhd",
       "source": {
-        "source": "github",
-        "repo": "ayghri/i-have-adhd",
+        "source": "url",
+        "url": "https://github.com/ayghri/i-have-adhd.git",
+        "ref": "main",
         "sha": "839872f9d1cd634fed642b4589ce7226199cc15f"
       },
       "category": "Productivity"

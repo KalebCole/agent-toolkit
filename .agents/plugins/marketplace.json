@@ -1,0 +1,63 @@
+{
+  "name": "kaleb-marketplace",
+  "interface": {
+    "displayName": "Kaleb Marketplace"
+  },
+  "plugins": [
+    {
+      "name": "kaleb-skills",
+      "source": {
+        "source": "local",
+        "path": "./plugins/kaleb-skills"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "humanizer",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/blader/humanizer.git",
+        "ref": "main",
+        "sha": "225a6f39ac85f76ee48dbad772ea4abe4ed6c9d8"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "visual-explainer",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/nicobailon/visual-explainer.git",
+        "path": "plugins/visual-explainer",
+        "ref": "main",
+        "sha": "5846f5aef34a23c8fea389d2f23ce56224cbf840"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    },
+    {
+      "name": "i-have-adhd",
+      "source": {
+        "source": "url",
+        "url": "https://github.com/ayghri/i-have-adhd.git",
+        "ref": "main",
+        "sha": "839872f9d1cd634fed642b4589ce7226199cc15f"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

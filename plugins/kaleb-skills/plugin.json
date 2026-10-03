@@ -1,0 +1,13 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "kaleb-skills",
+  "version": "1.0.0",
+  "description": "Kaleb's intentionally frozen standalone skills.",
+  "author": {
+    "name": "Kaleb Cole",
+    "url": "https://github.com/KalebCole"
+  },
+  "repository": "https://github.com/KalebCole/agent-toolkit",
+  "license": "MIT",
+  "keywords": ["skills", "productivity", "review"]
+}

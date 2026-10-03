@@ -2,30 +2,28 @@
 set -euo pipefail
 
 root="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+node "$root/scripts/catalog.mjs" validate
+node "$root/scripts/catalog.mjs" check
+npm test
+node "$root/scripts/validate-marketplace.mjs"
+
 test_home="$(mktemp -d)"
 trap 'rm -rf "$test_home"' EXIT
 
-node "$root/scripts/catalog.mjs" check
-node "$root/scripts/catalog.mjs" verify-sources
+if command -v copilot >/dev/null 2>&1; then
+  COPILOT_HOME="$test_home" copilot plugin marketplace add "$root"
+  COPILOT_HOME="$test_home" copilot plugin marketplace browse kaleb-marketplace --json >/dev/null
+  for plugin in kaleb-skills humanizer visual-explainer i-have-adhd; do
+    COPILOT_HOME="$test_home" copilot plugin install "$plugin@kaleb-marketplace"
+  done
+  echo "Copilot catalog and clean install checks passed"
+else
+  echo "Skipping Copilot catalog smoke check: copilot is not installed"
+fi
 
-export COPILOT_HOME="$test_home"
-copilot plugin marketplace add "$root"
-
-while IFS=$'\t' read -r plugin repo sha path; do
-  copilot plugin install "$plugin@agent-toolkit"
-
-  source_tree="$(mktemp -d)"
-  curl --fail --silent --show-error --location \
-    "https://api.github.com/repos/$repo/tarball/$sha" \
-    | tar --extract --gzip --strip-components=1 --directory "$source_tree"
-
-  expected="$source_tree"
-  if [[ -n "$path" ]]; then
-    expected="$source_tree/$path"
-  fi
-  installed="$COPILOT_HOME/installed-plugins/agent-toolkit/$plugin"
-  diff --recursive --brief "$expected" "$installed"
-  rm -rf "$source_tree"
-done < <(node "$root/scripts/catalog.mjs" plugin-sources)
-
-copilot plugin list
+if command -v claude >/dev/null 2>&1; then
+  CLAUDE_CONFIG_DIR="$test_home/claude" claude plugin validate "$root"
+else
+  echo "Skipping Claude catalog validation: claude is not installed"
+fi
