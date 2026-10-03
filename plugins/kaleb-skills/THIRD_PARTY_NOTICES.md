@@ -102,15 +102,17 @@ bundled helpers or make model calls.
 - License status: MIT. The reviewed root `LICENSE` applies to this skill and
   its complete text and copyright notice are included in the plugin-level
   `LICENSE`.
-- All six files are unchanged frozen copies, including invocation metadata.
-  The references linked by `SKILL.md` are included. The relay uses Node built-ins
-  only; its normal dispatch does not depend on another skill.
+- The references linked by `SKILL.md` are included. The relay uses Node
+  built-ins only; its normal dispatch does not depend on another skill.
 - Optional dependency blocker: relay `--lane` requires the separate
   `delegate-setup/scripts/lane.mjs` skill beside this relay. That unrelated
   skill is not included, so `--lane` is unavailable in this copy unless the
   user installs `delegate-setup` in the expected sibling location.
-- Local adjustments: none. This is a frozen skill copy; it has no automatic
-  updater or separate external catalog entry.
+- Local adjustment: `disable-model-invocation: true` was added to `SKILL.md` so
+  the user can invoke the skill directly and the model cannot invoke it
+  automatically. Other copied content and metadata are unchanged. This is a
+  frozen skill copy; it has no automatic updater or separate external catalog
+  entry.
 
 ## `grilling`
 

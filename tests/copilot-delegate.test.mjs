@@ -66,7 +66,19 @@ test("copilot-delegate preserves the complete reviewed upstream directory", asyn
   assert.deepEqual(await listFiles(skillRoot), [...reviewedFiles.keys()].sort());
   await Promise.all(
     [...reviewedFiles].map(async ([file, expectedHash]) => {
-      const content = await readFile(path.join(skillRoot, file));
+      let content = await readFile(path.join(skillRoot, file));
+      if (file === "SKILL.md") {
+        const sourceText = content.toString();
+        assert.equal(
+          sourceText.match(/^disable-model-invocation: true\n/gm)?.length,
+          1,
+          "SKILL.md must contain exactly one local invocation setting",
+        );
+        content = Buffer.from(sourceText.replace(
+          /^disable-model-invocation: true\n/m,
+          "",
+        ));
+      }
       assert.equal(
         createHash("sha256").update(content).digest("hex"),
         expectedHash,
@@ -85,6 +97,7 @@ test("copilot-delegate preserves its invocation metadata and bundled references"
     license: "MIT",
     compatibility:
       "Requires the `copilot` CLI installed and authenticated (`copilot login`), Node 18+ to run the relay (the copilot CLI itself requires Node 22+), and git. The orchestrator must be able to run shell commands and read files.",
+    "disable-model-invocation": true,
     metadata: { version: "0.5.0" },
   });
 
@@ -120,10 +133,10 @@ test("copilot-delegate records exact provenance, license, and optional dependenc
     "Reviewed license path: `LICENSE`",
     "Copyright (c) 2026 Ahmed Mohammed (amElnagdy)",
     "License status: MIT",
-    "All six files are unchanged frozen copies",
+    "The references linked by `SKILL.md` are included",
+    "`disable-model-invocation: true` was added to `SKILL.md`",
     "delegate-setup/scripts/lane.mjs",
     "`--lane` is unavailable",
-    "Local adjustments: none.",
     ...[...reviewedFiles.keys()].map((file) => `\`skills/copilot-delegate/${file}\``),
   ]) {
     assert.ok(section.includes(text), `provenance must include ${text}`);

@@ -9,6 +9,7 @@ description: >-
   inline, or when the user wants the code written directly without delegating.
 license: MIT
 compatibility: Requires the `copilot` CLI installed and authenticated (`copilot login`), Node 18+ to run the relay (the copilot CLI itself requires Node 22+), and git. The orchestrator must be able to run shell commands and read files.
+disable-model-invocation: true
 metadata:
   version: 0.5.0
 ---
