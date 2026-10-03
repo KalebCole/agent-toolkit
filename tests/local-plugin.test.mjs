@@ -168,6 +168,7 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
     "grilling",
     "obsidian-cli",
     "obsidian-markdown",
+    "skill-creator",
     "skill-grill",
   ]);
 
@@ -199,7 +200,7 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
     ["grilling", expectedGrillingSkill],
     ["skill-grill", expectedSkillGrill],
   ]);
-  const expectedObsidianMetadata = new Map([
+  const expectedDescriptions = new Map([
     [
       "obsidian-cli",
       "Interact with Obsidian vaults using the Obsidian CLI to read, create, search, and manage notes, tasks, properties, and more. Also supports plugin and theme development with commands to reload plugins, run JavaScript, capture errors, take screenshots, and inspect the DOM. Use when the user asks to interact with their Obsidian vault, manage notes, search vault content, perform vault operations from the command line, or develop and debug Obsidian plugins and themes.",
@@ -207,6 +208,10 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
     [
       "obsidian-markdown",
       "Create and edit Obsidian Flavored Markdown with wikilinks, embeds, callouts, properties, and other Obsidian-specific syntax. Use when working with .md files in Obsidian, or when the user mentions wikilinks, callouts, frontmatter, tags, embeds, or Obsidian notes.",
+    ],
+    [
+      "skill-creator",
+      "Create new skills, modify and improve existing skills, and measure skill performance. Use when users want to create a skill from scratch, edit, or optimize an existing skill, run evals to test a skill, benchmark skill performance with variance analysis, or optimize a skill's description for better triggering accuracy.",
     ],
   ]);
 
@@ -224,7 +229,7 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
     } else {
       assert.equal(
         frontmatter.description,
-        expectedObsidianMetadata.get(directoryName),
+        expectedDescriptions.get(directoryName),
       );
     }
   }

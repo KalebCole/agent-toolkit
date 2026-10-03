@@ -8,6 +8,6 @@
     "url": "https://github.com/KalebCole"
   },
   "repository": "https://github.com/KalebCole/kaleb-marketplace",
-  "license": "MIT",
+  "license": "MIT AND Apache-2.0",
   "keywords": ["skills", "productivity", "review"]
 }
