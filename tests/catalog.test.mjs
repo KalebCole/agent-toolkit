@@ -1,0 +1,186 @@
+import assert from "node:assert/strict";
+import { readFile, rm, mkdir, writeFile } from "node:fs/promises";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+import test from "node:test";
+
+import {
+  generateClaudeCatalog,
+  generateCopilotCatalog,
+  loadCanonicalCatalog,
+  renderJson,
+} from "../scripts/catalog.mjs";
+
+const execFileAsync = promisify(execFile);
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
+const scratchRoot = join(repoRoot, "tests", ".scratch");
+const scriptPath = join(repoRoot, "scripts", "catalog.mjs");
+const sha = "0123456789012345678901234567890123456789";
+
+const baseCatalog = {
+  name: "kaleb-marketplace",
+  interface: {
+    displayName: "Kaleb Marketplace",
+  },
+  plugins: [],
+};
+
+test("loadCanonicalCatalog reads the canonical marketplace order", async () => {
+  const catalog = await loadCanonicalCatalog();
+
+  assert.equal(catalog.name, "kaleb-marketplace");
+  assert.equal(catalog.interface.displayName, "Kaleb Marketplace");
+  assert.deepEqual(
+    catalog.plugins.map((plugin) => plugin.name),
+    ["kaleb-skills", "humanizer", "visual-explainer", "i-have-adhd"],
+  );
+});
+
+test("generateCopilotCatalog maps local sources to relative paths", () => {
+  const localCatalog = {
+    ...baseCatalog,
+    plugins: [
+      {
+        name: "kaleb-skills",
+        source: {
+          source: "local",
+          path: "./plugins/kaleb-skills",
+        },
+        policy: {
+          installation: "AVAILABLE",
+          authentication: "ON_INSTALL",
+        },
+        category: "Productivity",
+      },
+    ],
+  };
+
+  assert.deepEqual(
+    generateCopilotCatalog(localCatalog).plugins[0].source,
+    "./plugins/kaleb-skills",
+  );
+});
+
+test("generateClaudeCatalog preserves external URL source details", () => {
+  const externalCatalog = {
+    ...baseCatalog,
+    plugins: [
+      {
+        name: "tool",
+        source: {
+          source: "url",
+          url: "https://github.com/example/tool.git",
+          ref: "main",
+          sha,
+        },
+        policy: {
+          installation: "AVAILABLE",
+          authentication: "ON_INSTALL",
+        },
+        category: "Productivity",
+      },
+    ],
+  };
+
+  assert.deepEqual(generateClaudeCatalog(externalCatalog).plugins[0].source, {
+    source: "url",
+    url: "https://github.com/example/tool.git",
+    ref: "main",
+    sha,
+  });
+});
+
+test("generateCopilotCatalog rejects unmappable external archive URLs", () => {
+  const unmappableCatalog = {
+    ...baseCatalog,
+    plugins: [
+      {
+        name: "tool",
+        source: {
+          source: "url",
+          url: "https://example.com/tool/archive.tar.gz",
+          ref: "main",
+          sha,
+        },
+        policy: {
+          installation: "AVAILABLE",
+          authentication: "ON_INSTALL",
+        },
+        category: "Productivity",
+      },
+    ],
+  };
+
+  assert.throws(
+    () => generateCopilotCatalog(unmappableCatalog),
+    /tool.*Copilot.*archive/,
+  );
+});
+
+test("renderJson uses deterministic indentation and newline", () => {
+  assert.equal(renderJson({ name: "x" }), '{\n  "name": "x"\n}\n');
+});
+
+test("check reports the exact drifted output path", async () => {
+  const caseRoot = join(scratchRoot, "catalog-drift");
+  await rm(caseRoot, { recursive: true, force: true });
+  await mkdir(join(caseRoot, ".agents", "plugins"), { recursive: true });
+  await mkdir(join(caseRoot, ".github", "plugin"), { recursive: true });
+  await mkdir(join(caseRoot, ".claude-plugin"), { recursive: true });
+  await mkdir(join(caseRoot, "schemas"), { recursive: true });
+
+  const schema = await readFile(
+    join(repoRoot, "schemas", "marketplace.schema.json"),
+    "utf8",
+  );
+
+  const catalog = {
+    ...baseCatalog,
+    plugins: [
+      {
+        name: "kaleb-skills",
+        source: {
+          source: "local",
+          path: "./plugins/kaleb-skills",
+        },
+        policy: {
+          installation: "AVAILABLE",
+          authentication: "ON_INSTALL",
+        },
+        category: "Productivity",
+      },
+    ],
+  };
+
+  await writeFile(
+    join(caseRoot, "schemas", "marketplace.schema.json"),
+    schema,
+    "utf8",
+  );
+  await writeFile(
+    join(caseRoot, ".agents", "plugins", "marketplace.json"),
+    renderJson(catalog),
+    "utf8",
+  );
+
+  await execFileAsync("node", [scriptPath, "generate"], { cwd: caseRoot });
+
+  const generatedPath = join(caseRoot, ".github", "plugin", "marketplace.json");
+  const generated = await readFile(generatedPath, "utf8");
+  await writeFile(
+    generatedPath,
+    generated.replace("kaleb-marketplace", "kaleb-marketplacE"),
+    "utf8",
+  );
+
+  await assert.rejects(
+    () => execFileAsync("node", [scriptPath, "check"], { cwd: caseRoot }),
+    (error) => {
+      const output = `${error.stdout ?? ""}\n${error.stderr ?? ""}`;
+      assert.match(output, /\.github\/plugin\/marketplace\.json/);
+      return true;
+    },
+  );
+});
