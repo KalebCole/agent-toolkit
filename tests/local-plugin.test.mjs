@@ -170,6 +170,7 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
     "obsidian-markdown",
     "skill-creator",
     "skill-grill",
+    "wizard",
   ]);
 
   const manifest = JSON.parse(await readFile(path.join(pluginRoot, "plugin.json"), "utf8"));
@@ -226,7 +227,7 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
     assert.ok(frontmatter.description);
     if (expectedSkills.has(directoryName)) {
       assert.equal(skillDocument, expectedSkills.get(directoryName));
-    } else {
+    } else if (directoryName !== "wizard") {
       assert.equal(
         frontmatter.description,
         expectedDescriptions.get(directoryName),
@@ -269,6 +270,61 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
       expectedHash,
       `${relativePath} must match the reviewed upstream content`,
     );
+  }
+});
+
+test("Wizard preserves the complete frozen source, invocation settings, and provenance", async () => {
+  const wizardRoot = path.join(skillRoot, "wizard");
+  const expectedFiles = new Map([
+    ["SKILL.md", "bdf31d48211ea559878f95a4f344aeabf8d85897488ba564382bab0b000daac1"],
+    ["template.sh", "33cbe9dfb1d0e9185b60248a52aabed14bc64785a00cac695e302e739dd6c153"],
+    ["agents/openai.yaml", "98f44d682d58e262f160dc59a8befc365e0aa65820dd0261864af26aa8e59d83"],
+  ]);
+  assert.deepEqual((await readdir(wizardRoot)).sort(), ["SKILL.md", "agents", "template.sh"]);
+  assert.deepEqual(await readdir(path.join(wizardRoot, "agents")), ["openai.yaml"]);
+  for (const [relativePath, expectedHash] of expectedFiles) {
+    const content = await readFile(path.join(wizardRoot, relativePath));
+    assert.equal(
+      createHash("sha256").update(content).digest("hex"),
+      expectedHash,
+      `wizard/${relativePath} must match the reviewed upstream content`,
+    );
+  }
+
+  const document = await readFile(path.join(wizardRoot, "SKILL.md"), "utf8");
+  assert.deepEqual(parseFrontmatter(document), {
+    name: "wizard",
+    description: "Generate an interactive bash wizard that walks a human through steps only they can perform. Use when provisioning infrastructure, setting up credentials or CI secrets, walking an unfamiliar third-party dashboard, or running a one-off migration or cutover. Don't invoke this for steps the agent can perform itself.",
+  });
+  const agentMetadata = yaml.load(
+    await readFile(path.join(wizardRoot, "agents", "openai.yaml"), "utf8"),
+  );
+  assert.deepEqual(agentMetadata, {
+    interface: {
+      display_name: "Wizard",
+      short_description: "Generate an interactive setup wizard",
+    },
+  });
+  const relativeLinks = [...document.matchAll(/\]\((?!https?:\/\/)([^)]+)\)/g)]
+    .map((match) => match[1]);
+  assert.deepEqual(relativeLinks, ["template.sh"]);
+  for (const relativePath of relativeLinks) {
+    assert.ok(expectedFiles.has(relativePath), `${relativePath} must be included`);
+  }
+
+  const notices = await readFile(path.join(pluginRoot, "THIRD_PARTY_NOTICES.md"), "utf8");
+  const wizardNotice = notices.split("## `wizard`\n")[1]?.split("\n## ")[0];
+  assert.ok(wizardNotice, "Wizard must have its own provenance notice");
+  for (const expected of [
+    "https://github.com/mattpocock/skills",
+    "d81f3a183412e71a5b1e84ca21bc1a35eea03a60",
+    "skills/engineering/wizard/",
+    "Reviewed license path: `LICENSE`",
+    "Copyright (c) 2026 Matt Pocock",
+    "License status: MIT",
+    ...[...expectedFiles.keys()].map((file) => `skills/wizard/${file}`),
+  ]) {
+    assert.ok(wizardNotice.includes(expected), `Wizard notice must include ${expected}`);
   }
 });
 
