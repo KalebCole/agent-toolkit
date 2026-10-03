@@ -17,6 +17,7 @@ const execFileAsync = promisify(execFile);
 const repoRoot = join(dirname(fileURLToPath(import.meta.url)), "..");
 const scratchRoot = join(repoRoot, "tests", ".scratch");
 const scriptPath = join(repoRoot, "scripts", "catalog.mjs");
+const validateScriptPath = join(repoRoot, "scripts", "validate-marketplace.sh");
 const sha = "0123456789012345678901234567890123456789";
 
 const baseCatalog = {
@@ -119,6 +120,58 @@ test("generateCopilotCatalog rejects unmappable external archive URLs", () => {
   );
 });
 
+test("validate rejects canonical external URLs that Copilot cannot map", async () => {
+  const caseRoot = join(scratchRoot, "catalog-validate-unmappable");
+  await rm(caseRoot, { recursive: true, force: true });
+  await mkdir(join(caseRoot, ".agents", "plugins"), { recursive: true });
+  await mkdir(join(caseRoot, "schemas"), { recursive: true });
+
+  const schema = await readFile(
+    join(repoRoot, "schemas", "marketplace.schema.json"),
+    "utf8",
+  );
+
+  const catalog = {
+    ...baseCatalog,
+    plugins: [
+      {
+        name: "tool",
+        source: {
+          source: "url",
+          url: "https://example.com/tool.git",
+          ref: "main",
+          sha,
+        },
+        policy: {
+          installation: "AVAILABLE",
+          authentication: "ON_INSTALL",
+        },
+        category: "Productivity",
+      },
+    ],
+  };
+
+  await writeFile(
+    join(caseRoot, "schemas", "marketplace.schema.json"),
+    schema,
+    "utf8",
+  );
+  await writeFile(
+    join(caseRoot, ".agents", "plugins", "marketplace.json"),
+    renderJson(catalog),
+    "utf8",
+  );
+
+  await assert.rejects(
+    () => execFileAsync("node", [scriptPath, "validate"], { cwd: caseRoot }),
+    (error) => {
+      const output = `${error.stdout ?? ""}\n${error.stderr ?? ""}`;
+      assert.match(output, /Copilot cannot map|cannot be mapped for Copilot/);
+      return true;
+    },
+  );
+});
+
 test("renderJson uses deterministic indentation and newline", () => {
   assert.equal(renderJson({ name: "x" }), '{\n  "name": "x"\n}\n');
 });
@@ -183,4 +236,28 @@ test("check reports the exact drifted output path", async () => {
       return true;
     },
   );
+});
+
+test("validate-marketplace fails on drift without rewriting generated files", async () => {
+  const generatedPath = join(repoRoot, ".github", "plugin", "marketplace.json");
+  const original = await readFile(generatedPath, "utf8");
+  const drifted = original.replace("kaleb-marketplace", "kaleb-marketplacE");
+
+  await writeFile(generatedPath, drifted, "utf8");
+
+  try {
+    let failure;
+    try {
+      await execFileAsync("bash", [validateScriptPath], { cwd: repoRoot });
+    } catch (error) {
+      failure = error;
+    }
+
+    assert.ok(failure, "validate-marketplace should fail when generated output drifts");
+    const output = `${failure.stdout ?? ""}\n${failure.stderr ?? ""}`;
+    assert.match(output, /\.github\/plugin\/marketplace\.json/);
+    assert.equal(await readFile(generatedPath, "utf8"), drifted);
+  } finally {
+    await writeFile(generatedPath, original, "utf8");
+  }
 });

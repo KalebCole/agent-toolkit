@@ -72,6 +72,17 @@ function validateSourceShape(plugin) {
   }
 }
 
+function validateSourceMappings(plugin) {
+  for (const target of ["copilot", "claude"]) {
+    try {
+      mappings[plugin.source.source][target](plugin.source);
+    } catch (error) {
+      const detail = error instanceof Error ? error.message : String(error);
+      throw new Error(`${plugin.name} canonical source cannot be mapped for ${target === "copilot" ? "Copilot" : "Claude"}: ${detail}`);
+    }
+  }
+}
+
 function githubRepo(url) {
   let parsed;
   try {
@@ -172,6 +183,7 @@ function validateCanonicalCatalog(catalog, validate) {
     }
     names.add(plugin.name);
     validateSourceShape(plugin);
+    validateSourceMappings(plugin);
   }
 
   return catalog;
