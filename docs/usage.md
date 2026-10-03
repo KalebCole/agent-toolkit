@@ -10,24 +10,21 @@ project publishes its own installer.
 
 ## Marketplace registration
 
-Until the GitHub repository is renamed:
-
 ```bash
-copilot plugin marketplace add KalebCole/agent-toolkit
-claude plugin marketplace add KalebCole/agent-toolkit
+copilot plugin marketplace add KalebCole/kaleb-marketplace
+claude plugin marketplace add KalebCole/kaleb-marketplace
 ```
 
 The marketplace name inside both client catalogs is `kaleb-marketplace`.
+Browse the current contents in the
+[canonical catalog](../.agents/plugins/marketplace.json).
 
 Install one item at a time:
 
 ```bash
-copilot plugin install kaleb-skills@kaleb-marketplace
-claude plugin install kaleb-skills@kaleb-marketplace
+copilot plugin install <plugin-name>@kaleb-marketplace
+claude plugin install <plugin-name>@kaleb-marketplace
 ```
-
-Available marketplace names are `kaleb-skills`, `humanizer`,
-`visual-explainer`, and `i-have-adhd`.
 
 The local package follows Agent Plugins 1.0. External entries use the native
 package layout at the exact commit in `.agents/plugins/marketplace.json`.
