@@ -40,6 +40,16 @@
         "sha": "839872f9d1cd634fed642b4589ce7226199cc15f"
       },
       "category": "Productivity"
+    },
+    {
+      "name": "pstack",
+      "source": {
+        "source": "github",
+        "repo": "michael-denyer/pstack-claude",
+        "path": "plugins/pstack",
+        "sha": "55430ba22ccc751ab608422761aff14b2f063e5d"
+      },
+      "category": "Developer Tools"
     }
   ]
 }
