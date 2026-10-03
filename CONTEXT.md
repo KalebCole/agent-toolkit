@@ -48,7 +48,8 @@ _Avoid_: maintained external reference
 ## Current scope
 
 - `kaleb-skills` is the only Local Stored Plugin.
-- Humanizer, Visual Explainer, and i-have-adhd are Maintained External Plugin
+- `i-have-adhd` is a Frozen Skill Copy in `kaleb-skills`, not an external plugin.
+- Humanizer, Visual Explainer, and PStack are Maintained External Plugin
   References.
 - Impeccable is documented through its Native External Installer.
 - Client catalogs contain only mappings that preserve the pinned native

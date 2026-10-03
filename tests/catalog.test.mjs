@@ -36,7 +36,7 @@ test("loadCanonicalCatalog reads the canonical marketplace order", async () => {
   assert.equal(catalog.interface.displayName, "Kaleb Marketplace");
   assert.deepEqual(
     catalog.plugins.map((plugin) => plugin.name),
-    ["kaleb-skills", "humanizer", "visual-explainer", "i-have-adhd", "pstack"],
+    ["kaleb-skills", "humanizer", "visual-explainer", "pstack"],
   );
 
   const pstack = catalog.plugins.find((plugin) => plugin.name === "pstack");
@@ -81,6 +81,28 @@ test("generateCopilotCatalog maps local sources to relative paths", () => {
   assert.equal(generated.metadata.version, "1.0.0");
   assert.deepEqual(generated.plugins[0].source, "./plugins/kaleb-skills");
   assert.equal("policy" in generated.plugins[0], false);
+});
+
+test("client catalogs provide ADHD only through the stored kaleb-skills plugin", async () => {
+  const catalog = await loadCanonicalCatalog();
+  for (const file of [
+    ".agents/plugins/marketplace.json",
+    ".github/plugin/marketplace.json",
+    ".claude-plugin/marketplace.json",
+  ]) {
+    const contents = await readFile(join(repoRoot, file), "utf8");
+    const client = JSON.parse(contents);
+    assert.equal(client.plugins.filter((plugin) => plugin.name === "kaleb-skills").length, 1);
+    assert.ok(client.plugins.every((plugin) => plugin.name !== "i-have-adhd"));
+    assert.doesNotMatch(contents, /ayghri\/i-have-adhd/);
+  }
+  for (const generated of [generateCopilotCatalog(catalog), generateClaudeCatalog(catalog)]) {
+    const stored = generated.plugins.find((plugin) => plugin.name === "kaleb-skills");
+    assert.equal(stored.source, "./plugins/kaleb-skills");
+    assert.ok(generated.plugins.every((plugin) => plugin.name !== "i-have-adhd"));
+  }
+  const installScript = await readFile(validateScriptPath, "utf8");
+  assert.doesNotMatch(installScript, /i-have-adhd/);
 });
 
 test("generateClaudeCatalog preserves external URL source details", () => {

@@ -14,6 +14,31 @@ This plugin contains frozen copies of reviewed upstream skill files.
 - License status: MIT; `LICENSE` in this plugin reproduces the reviewed MIT
   text from the source repository.
 
+## `i-have-adhd`
+
+- Source repository: `https://github.com/ayghri/i-have-adhd`
+- Reviewed commit: `839872f9d1cd634fed642b4589ce7226199cc15f`
+- Original source paths:
+  `skills/i-have-adhd/SKILL.md`,
+  `skills/i-have-adhd/agents/openai.yaml`,
+  `skills/i-have-adhd/agents/gemini.toml`
+- Copied files:
+  `skills/i-have-adhd/SKILL.md`,
+  `skills/i-have-adhd/agents/openai.yaml`,
+  `skills/i-have-adhd/agents/gemini.toml`
+- Reviewed license path: `LICENSE`
+- Copied license: `skills/i-have-adhd/LICENSE`
+- Copyright notice:
+  `Copyright (c) 2026 Ayoub Ghriss`
+- License status: MIT; `skills/i-have-adhd/LICENSE` reproduces the reviewed
+  MIT text from the source repository. The plugin-root `LICENSE` continues
+  to apply to the other reviewed skill copies.
+- Copy status: intentionally frozen, with no automated upstream updates.
+  All copied files are unchanged. The skill's `disable-model-invocation: true`
+  and OpenAI metadata's `allow_implicit_invocation: false` are preserved.
+  The `agents/` files are passive supporting metadata; no upstream plugin
+  manifests, hooks, scripts, or runtime integrations are included.
+
 ## `grilling`
 
 - Source repository: `https://github.com/mattpocock/skills`

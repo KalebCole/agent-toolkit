@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
 
-import { findUpdates, updatePin } from "../scripts/catalog.mjs";
+import { findUpdates, loadCanonicalCatalog, updatePin } from "../scripts/catalog.mjs";
 
 const oldSha = "0123456789012345678901234567890123456789";
 const newSha = "abcdefabcdefabcdefabcdefabcdefabcdefabcd";
@@ -69,4 +69,21 @@ test("updatePin changes only the named external", () => {
     () => updatePin(catalog, "kaleb-skills", newSha),
     /not external/,
   );
+});
+
+test("real update discovery excludes the frozen ADHD skill and local collection", async () => {
+  const actualCatalog = await loadCanonicalCatalog();
+  const requested = [];
+  const result = await findUpdates(actualCatalog, async (source) => {
+    requested.push(source.url);
+    return newSha;
+  });
+  assert.deepEqual(result.include, [
+    { name: "humanizer" },
+    { name: "visual-explainer" },
+    { name: "pstack" },
+  ]);
+  assert.ok(requested.every((url) => !url.includes("ayghri/i-have-adhd")));
+  assert.throws(() => updatePin(actualCatalog, "i-have-adhd", newSha), /Unknown plugin/);
+  assert.throws(() => updatePin(actualCatalog, "kaleb-skills", newSha), /not external/);
 });

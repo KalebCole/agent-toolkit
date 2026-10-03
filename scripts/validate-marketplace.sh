@@ -14,7 +14,7 @@ trap 'rm -rf "$test_home"' EXIT
 if command -v copilot >/dev/null 2>&1; then
   COPILOT_HOME="$test_home" copilot plugin marketplace add "$root"
   COPILOT_HOME="$test_home" copilot plugin marketplace browse kaleb-marketplace --json >/dev/null
-  for plugin in kaleb-skills humanizer visual-explainer i-have-adhd pstack; do
+  for plugin in kaleb-skills humanizer visual-explainer pstack; do
     COPILOT_HOME="$test_home" copilot plugin install "$plugin@kaleb-marketplace"
   done
   echo "Copilot catalog and clean install checks passed"

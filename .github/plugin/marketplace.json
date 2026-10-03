@@ -33,15 +33,6 @@
       "category": "Productivity"
     },
     {
-      "name": "i-have-adhd",
-      "source": {
-        "source": "github",
-        "repo": "ayghri/i-have-adhd",
-        "sha": "839872f9d1cd634fed642b4589ce7226199cc15f"
-      },
-      "category": "Productivity"
-    },
-    {
       "name": "pstack",
       "source": {
         "source": "github",

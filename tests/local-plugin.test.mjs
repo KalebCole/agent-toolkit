@@ -145,6 +145,7 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
     "bro",
     "grill-me",
     "grilling",
+    "i-have-adhd",
     "obsidian-cli",
     "obsidian-markdown",
   ]);
@@ -187,7 +188,7 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
     ],
   ]);
 
-  for (const directoryName of skillDirectories) {
+  for (const directoryName of skillDirectories.filter((name) => name !== "i-have-adhd")) {
     const skillDocument = await readFile(
       path.join(skillRoot, directoryName, "SKILL.md"),
       "utf8",
@@ -236,5 +237,49 @@ test("kaleb-skills plugin ships the frozen reviewed skills and notices", async (
       expectedHash,
       `${relativePath} must match the reviewed upstream content`,
     );
+  }
+});
+
+test("i-have-adhd preserves exact upstream files, provenance, and explicit invocation", async () => {
+  const adhdRoot = path.join(skillRoot, "i-have-adhd");
+  const upstreamBlobs = new Map([
+    ["SKILL.md", "9138ae4af11065b7971eea17edc48a2498c1af35"],
+    ["agents/openai.yaml", "0e8285b9bb854e7ee4c25f4c48f593a87e9eb85d"],
+    ["agents/gemini.toml", "a7d766c9dbf5188f3adadfe59cbf6aa1de3bc4ca"],
+    ["LICENSE", "19db5f1b0ca65e277c158bd4c4263139ccfd859c"],
+  ]);
+  assert.deepEqual(
+    (await readdir(adhdRoot, { recursive: true })).sort(),
+    ["LICENSE", "SKILL.md", "agents", "agents/gemini.toml", "agents/openai.yaml"],
+  );
+  for (const [file, expectedBlob] of upstreamBlobs) {
+    const contents = await readFile(path.join(adhdRoot, file));
+    const blob = createHash("sha1")
+      .update(`blob ${contents.length}\0`)
+      .update(contents)
+      .digest("hex");
+    assert.equal(blob, expectedBlob, `${file} must match the reviewed upstream blob`);
+  }
+
+  const document = await readFile(path.join(adhdRoot, "SKILL.md"), "utf8");
+  const metadata = parseFrontmatter(document);
+  assert.equal(metadata.name, "i-have-adhd");
+  assert.ok(metadata.description);
+  assert.equal(metadata["disable-model-invocation"], true);
+  const openai = yaml.load(await readFile(path.join(adhdRoot, "agents/openai.yaml"), "utf8"));
+  assert.equal(openai.policy.allow_implicit_invocation, false);
+
+  const notices = await readFile(path.join(pluginRoot, "THIRD_PARTY_NOTICES.md"), "utf8");
+  const section = notices.split("## `i-have-adhd`\n")[1]?.split("\n## ")[0];
+  assert.ok(section, "notices must include i-have-adhd provenance");
+  for (const text of [
+    "https://github.com/ayghri/i-have-adhd",
+    "839872f9d1cd634fed642b4589ce7226199cc15f",
+    "Copyright (c) 2026 Ayoub Ghriss",
+    "intentionally frozen",
+    "no automated upstream updates",
+    ...[...upstreamBlobs.keys()].map((file) => `skills/i-have-adhd/${file}`),
+  ]) {
+    assert.ok(section.includes(text), `notices must record ${text}`);
   }
 });
